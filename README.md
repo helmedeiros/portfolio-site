@@ -125,7 +125,31 @@ The website is fully responsive with breakpoints:
 - Email obfuscation to prevent spam
 - Safe DOM manipulation practices
 - Regular dependency auditing
+- Automated dependency updates via Dependabot
 - See [SECURITY.md](SECURITY.md) for full details
+
+## 🔄 Automated Maintenance
+
+### Dependabot Configuration
+
+This repository uses Dependabot for automatic dependency management:
+
+- **Schedule**: Weekly updates on Mondays at 9:00 AM (Berlin time)
+- **NPM Dependencies**: Automatically updates Astro, Tailwind, and all other dependencies
+- **GitHub Actions**: Keeps workflow actions up-to-date
+- **Grouped Updates**: Related packages are grouped together (e.g., Astro ecosystem, Tailwind ecosystem)
+- **Security Updates**: High-priority security updates are created immediately
+- **Pull Request Limits**: Maximum 5 dependency PRs and 2 GitHub Actions PRs open at once
+
+### What Gets Updated Automatically
+
+- Astro framework and related packages
+- Tailwind CSS and plugins
+- Development dependencies
+- GitHub Actions workflows
+- Security patches (immediate)
+
+All updates are reviewed before merging to ensure compatibility.
 
 ## 🤝 Contributing
 
