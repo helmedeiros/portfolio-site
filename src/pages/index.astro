@@ -230,15 +230,15 @@ import Layout from '../layouts/Layout.astro';
         Ready to build something amazing together? Let's discuss your challenges and explore innovative solutions.
       </p>
 
-      <a href="mailto:helio.medeiros@email.com" class="inline-block bg-gray-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-gray-800 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg text-lg mb-12">
+      <button id="contact-btn" class="inline-block bg-gray-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-gray-800 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg text-lg mb-12">
         Contact me
-      </a>
+      </button>
 
       <!-- Contact Info -->
       <div class="flex flex-col md:flex-row justify-center items-center gap-8 text-gray-600">
-        <a href="mailto:helio.medeiros@email.com" class="hover:text-gray-900 transition-colors font-medium">
-          helio.medeiros@email.com
-        </a>
+        <span id="email-display" class="hover:text-gray-900 transition-colors font-medium cursor-pointer">
+          Click "Contact me" to reveal email
+        </span>
         <span class="hidden md:block">•</span>
         <span class="font-medium">Berlin, Germany</span>
         <span class="hidden md:block">•</span>
@@ -256,21 +256,57 @@ import Layout from '../layouts/Layout.astro';
         </div>
 
         <div class="flex space-x-6">
-          <a href="https://www.linkedin.com/in/helio-medeiros-4877123/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+          <a href="https://www.linkedin.com/in/heliomedeiros" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
             LinkedIn
           </a>
-          <a href="https://github.com/helio-medeiros" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+          <a href="https://github.com/helmedeiros" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
             GitHub
           </a>
-          <a href="mailto:helio.medeiros@email.com" class="text-gray-400 hover:text-white transition-colors">
+          <span id="footer-email" class="text-gray-400 hover:text-white transition-colors cursor-pointer">
             Email
-          </a>
+          </span>
         </div>
       </div>
     </div>
   </footer>
 
   <script>
+    // Email obfuscation - decode the email when needed
+    function decodeEmail() {
+      // Encoded: hi@heliomedeiros.com
+      const encoded = "aGlAaGVsaW9tZWRlaXJvcy5jb20=";
+      return atob(encoded);
+    }
+
+    // Alternative: ROT13 or simple character shifting could be used
+    function getEmailParts() {
+      const user = "hi";
+      const domain = "heliomedeiros.com";
+      return `${user}@${domain}`;
+    }
+
+    // Contact button click handler
+    document.getElementById('contact-btn').addEventListener('click', function() {
+      const email = getEmailParts();
+      const emailDisplay = document.getElementById('email-display');
+
+      // Update the display
+      emailDisplay.innerHTML = `<a href="mailto:${email}" class="hover:text-gray-900 transition-colors font-medium">${email}</a>`;
+
+      // Update button text
+      this.textContent = 'Email revealed!';
+      this.style.backgroundColor = '#059669';
+
+      // Optional: Auto-open email client
+      // window.location.href = `mailto:${email}`;
+    });
+
+    // Footer email click handler
+    document.getElementById('footer-email').addEventListener('click', function() {
+      const email = getEmailParts();
+      window.location.href = `mailto:${email}`;
+    });
+
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
