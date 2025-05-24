@@ -1,0 +1,26 @@
+feat: implement clean minimalist design inspired by Bastien Moiroux
+
+This commit introduces a complete redesign of the portfolio website with a
+clean, minimalist aesthetic inspired by Bastien Moiroux's design principles.
+
+Key changes:
+- Fixed Tailwind CSS v4 styling issues by properly importing global.css in Layout component
+- Centralized all custom styles, fonts, and animations in src/styles/global.css
+- Removed duplicate styles between component and global CSS files
+- Added Inter font family with proper CSS custom properties
+- Implemented clean typography hierarchy with bold headlines and subtle accents
+- Created responsive grid layouts for hero, about, work, and contact sections
+- Added smooth animations and hover effects throughout the interface
+- Established consistent spacing and modern card-based design system
+
+The new design features:
+- Large, bold typography with tracking adjustments
+- Strategic use of white space for visual breathing room
+- Subtle gradients and modern color palette (grays with blue/purple accents)
+- Professional project showcases with hover animations
+- Clean contact section with the signature "hello!" message
+- Fully responsive design optimized for all device sizes
+
+This resolves styling conflicts and provides a professional, modern foundation
+for the portfolio that aligns with contemporary design trends while maintaining
+excellent readability and user experience.
