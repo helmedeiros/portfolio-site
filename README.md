@@ -2,6 +2,8 @@
 
 A modern, minimalist personal website inspired by Bastien Moiroux's clean design aesthetic. Built with Astro and featuring a responsive design with smooth animations and professional presentation.
 
+**🌐 Live Site:** [heliomedeiros.com](https://heliomedeiros.com)
+
 ## 🎨 Design Features
 
 - **Minimalist Design**: Clean, spacious layout with strategic use of white space
@@ -26,6 +28,55 @@ npm run dev
 ```
 
 3. Open [http://localhost:4321](http://localhost:4321) in your browser
+
+## 🚢 Deployment to GitHub Pages
+
+This site is configured for automatic deployment to GitHub Pages with a custom domain.
+
+### Automatic Deployment
+
+- **Trigger**: Every push to the `main` branch
+- **Build**: Automated via GitHub Actions
+- **Deploy**: Automatic to GitHub Pages
+- **Domain**: Custom domain `heliomedeiros.com`
+
+### Manual Deployment
+
+```bash
+# Build for production
+npm run build
+
+# Preview the build locally
+npm run preview
+```
+
+### GitHub Pages Setup
+
+1. **Repository Settings**:
+
+   - Go to repository Settings → Pages
+   - Source: "Deploy from a branch" → "GitHub Actions"
+   - Custom domain: `heliomedeiros.com`
+
+2. **DNS Configuration**:
+
+   ```
+   Type: A
+   Name: @
+   Value: 185.199.108.153
+   Value: 185.199.109.153
+   Value: 185.199.110.153
+   Value: 185.199.111.153
+
+   Type: CNAME
+   Name: www
+   Value: helio-medeiros.github.io
+   ```
+
+3. **Automatic Deployment**:
+   - The GitHub Actions workflow (`.github/workflows/deploy.yml`) handles building and deploying
+   - SSL certificate is automatically provided by GitHub Pages
+   - Deploy on every push to `main` branch
 
 ## ✏️ Customization Guide
 
@@ -69,35 +120,16 @@ Replace the following placeholder content with your information:
 
 **Images:**
 
-- Line 304: Replace `.profile-placeholder` with your actual photo
-- Lines 193, 213, 233: Replace project image placeholders with actual project images
+- Replace hero placeholder with your photo as `public/helio-photo.jpg`
+- Add project images in the work section
 
 ### Adding Your Photo
 
-Replace the placeholder div (`.profile-placeholder`) with an actual image:
+Replace the placeholder with your actual image:
 
-```html
-<div class="hero-image">
-  <img
-    src="/path-to-your-photo.jpg"
-    alt="Your Name"
-    style="width: 300px; height: 300px; border-radius: 20px; object-fit: cover;"
-  />
-</div>
-```
-
-### Adding Project Images
-
-Replace the project image placeholders:
-
-```html
-<div class="project-image">
-  <img
-    src="/path-to-project-image.jpg"
-    alt="Project Name"
-    style="width: 100%; height: 100%; object-fit: cover;"
-  />
-</div>
+```bash
+# Add your photo to the public directory
+cp your-photo.jpg public/helio-photo.jpg
 ```
 
 ## 📁 Project Structure
@@ -106,18 +138,22 @@ Replace the project image placeholders:
 src/
 ├── pages/
 │   └── index.astro          # Main homepage with all sections
-├── layouts/                 # (Optional) Create layouts here
-└── styles/                  # (Optional) Additional styles
+├── layouts/
+│   └── Layout.astro         # Base layout with SEO and global styles
+└── styles/
+    └── global.css           # Global styles with Tailwind and custom CSS
 ```
 
 ## 🛠️ Technologies Used
 
-- **Astro**: Static site generator
-- **TailwindCSS**: Utility-first CSS framework
+- **Astro**: Static site generator optimized for performance
+- **TailwindCSS v4**: Utility-first CSS framework
 - **CSS Grid & Flexbox**: Modern layout techniques
 - **CSS Custom Properties**: For maintainable theming
 - **Intersection Observer API**: For scroll animations
 - **Google Fonts**: Inter font family
+- **GitHub Actions**: Automated CI/CD pipeline
+- **GitHub Pages**: Static site hosting with custom domain
 
 ## 📱 Responsive Design
 
@@ -134,6 +170,7 @@ The website is fully responsive with breakpoints:
 - Lazy loading animations
 - Minimal JavaScript footprint
 - SEO-friendly structure
+- Fast loading times with Astro's static generation
 
 ## 🎯 Inspired by Bastien Moiroux
 
@@ -146,21 +183,12 @@ This design takes inspiration from [Bastien Moiroux's portfolio](https://bastien
 - Professional project presentation
 - Personal touch in contact section
 
-## 📦 Deployment
+## 🔒 Privacy & Security
 
-Build for production:
-
-```bash
-npm run build
-```
-
-Preview the build:
-
-```bash
-npm run preview
-```
-
-Deploy to your preferred hosting platform (Netlify, Vercel, GitHub Pages, etc.)
+- SSL certificate automatically provided by GitHub Pages
+- No tracking or analytics (privacy-first approach)
+- Secure hosting with GitHub's infrastructure
+- Family privacy protection in content
 
 ## 📄 License
 
@@ -168,13 +196,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-**Next Steps:**
-
-1. Replace all placeholder content with your personal information
-2. Add your actual photos and project images
-3. Customize colors and fonts to match your brand
-4. Add your real projects and case studies
-5. Update contact information and social links
-6. Deploy to your domain
-
-Enjoy your new portfolio website! 🚀
+**Live at:** [heliomedeiros.com](https://heliomedeiros.com) 🚀

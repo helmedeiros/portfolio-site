@@ -1,19 +1,27 @@
-fix: remove children's names from about section for privacy
+feat: configure GitHub Pages deployment with custom domain
 
-This commit updates the about section to remove specific mention of children's
-names while maintaining the personal and family-oriented tone of the content.
+This commit sets up automatic deployment to GitHub Pages with custom domain
+heliomedeiros.com, including GitHub Actions workflow and domain configuration.
 
-Changes made:
-- Replaced "sketching ideas with my kids Kenzo and Hiro" with "spending time with my family"
-- Preserved the personal touch that shows work-life balance
-- Maintained professional boundaries appropriate for a public portfolio
-- Kept the content engaging while respecting family privacy
+Configuration added:
+- Updated Astro config with site URL and static output for GitHub Pages
+- Created GitHub Actions workflow for automated build and deployment
+- Added CNAME file for custom domain configuration
+- Updated README with comprehensive deployment instructions and DNS setup
 
-Rationale:
-This change enhances privacy protection for family members while still
-conveying that the professional has a well-rounded life outside of work.
-The updated text maintains the same warm, personal tone without exposing
-private information about children in a public-facing professional portfolio.
+Deployment features:
+- Automatic deployment on every push to main branch
+- Custom domain: heliomedeiros.com
+- SSL certificate automatically provided by GitHub Pages
+- Optimized static site generation with Astro
+- CI/CD pipeline using GitHub Actions and withastro/action@v2
 
-This ensures the website remains personal and approachable while following
-best practices for online privacy and professional presentation.
+Setup requirements:
+1. Configure repository Settings → Pages → Source: "GitHub Actions"
+2. Set custom domain in GitHub Pages settings
+3. Configure DNS records for heliomedeiros.com:
+   - A records pointing to GitHub Pages IP addresses
+   - CNAME record for www subdomain
+
+This enables professional hosting with automatic deployments, SSL security,
+and custom domain branding for the portfolio website.
