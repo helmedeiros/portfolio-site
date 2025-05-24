@@ -1,27 +1,16 @@
-feat: configure GitHub Pages deployment with custom domain
+feat: implement email protection with JavaScript obfuscation
 
-This commit sets up automatic deployment to GitHub Pages with custom domain
-heliomedeiros.com, including GitHub Actions workflow and domain configuration.
+Add click-to-reveal email functionality to protect against bots while
+maintaining user accessibility. The implementation uses Base64 encoding
+and JavaScript-based email generation to hide the email address from
+automated scrapers.
 
-Configuration added:
-- Updated Astro config with site URL and static output for GitHub Pages
-- Created GitHub Actions workflow for automated build and deployment
-- Added CNAME file for custom domain configuration
-- Updated README with comprehensive deployment instructions and DNS setup
+Changes:
+- Contact section now shows "Click 'Contact me' to reveal email" initially
+- Button click reveals hi@heliomedeiros.com with mailto functionality
+- Footer email link also uses the protected email system
+- Email is constructed using separate user/domain parts for additional obfuscation
+- Includes fallback Base64 decoding method as alternative approach
 
-Deployment features:
-- Automatic deployment on every push to main branch
-- Custom domain: heliomedeiros.com
-- SSL certificate automatically provided by GitHub Pages
-- Optimized static site generation with Astro
-- CI/CD pipeline using GitHub Actions and withastro/action@v2
-
-Setup requirements:
-1. Configure repository Settings → Pages → Source: "GitHub Actions"
-2. Set custom domain in GitHub Pages settings
-3. Configure DNS records for heliomedeiros.com:
-   - A records pointing to GitHub Pages IP addresses
-   - CNAME record for www subdomain
-
-This enables professional hosting with automatic deployments, SSL security,
-and custom domain branding for the portfolio website.
+This enhances security while preserving user experience and maintaining
+professional contact accessibility.
