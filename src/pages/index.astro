@@ -1,0 +1,321 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Helio Medeiros • Engineering Leader">
+  <!-- Navigation -->
+  <nav class="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-100 z-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex justify-between items-center py-4">
+        <a href="#" class="text-xl font-bold text-gray-900 tracking-tight">helio.</a>
+        <ul class="hidden md:flex space-x-8">
+          <li><a href="#about" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">About</a></li>
+          <li><a href="#work" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">Work</a></li>
+          <li><a href="#contact" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 relative overflow-hidden">
+    <div class="max-w-6xl mx-auto px-6 py-20">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="space-y-8">
+          <!-- Status Badge -->
+          <div class="inline-flex items-center gap-2 bg-green-50 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+            <span class="w-2 h-2 bg-green-500 rounded-full status-dot"></span>
+            Available for opportunities
+          </div>
+
+          <!-- Main Headline -->
+          <div>
+            <h1 class="text-6xl lg:text-8xl font-black text-gray-900 leading-none tracking-tight mb-4">
+              Hello, I'm<br/>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                Helio Medeiros.
+              </span>
+            </h1>
+
+            <div class="text-2xl lg:text-3xl font-light text-gray-600 mb-6 space-y-1">
+              <div class="font-bold tracking-wide">ENGINEERING</div>
+              <div class="font-bold tracking-wide">LEADER</div>
+            </div>
+
+            <p class="text-lg text-gray-600 leading-relaxed max-w-lg">
+              Building scalable systems and leading high-performing teams in fintech and travel tech.
+              Turning complex technical challenges into elegant solutions.
+            </p>
+          </div>
+
+          <!-- CTA Button -->
+          <a href="#contact" class="inline-block bg-gray-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-gray-800 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg">
+            Let's work together
+          </a>
+        </div>
+
+        <!-- Hero Image -->
+        <div class="flex justify-center lg:justify-end">
+          <div class="w-80 h-80 bg-gradient-to-br from-blue-100 to-purple-100 rounded-3xl flex items-center justify-center border border-gray-200 shadow-lg">
+            <span class="text-gray-500 text-lg font-medium">Your Photo Here</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-20 bg-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid lg:grid-cols-3 gap-12">
+        <div>
+          <h2 class="text-5xl font-black text-gray-900 leading-tight">About</h2>
+        </div>
+
+        <div class="lg:col-span-2 space-y-8">
+          <div class="space-y-6 text-lg text-gray-600 leading-relaxed">
+            <p>
+              Engineering Leader with 20 years of experience building scalable systems and leading high-performing teams in fintech and travel tech. Based in Berlin, Germany, I specialize in turning complex technical challenges into elegant solutions.
+            </p>
+
+            <p>
+              I'm passionate about engineering empathy, team ownership, and efficiency-first approaches. When I'm not coding or mentoring teams, you'll find me exploring new cities or sketching ideas with my kids Kenzo and Hiro.
+            </p>
+          </div>
+
+          <!-- Skills Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
+              Leadership
+            </div>
+            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
+              Java
+            </div>
+            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
+              System Design
+            </div>
+            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
+              Team Building
+            </div>
+            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
+              BigQuery
+            </div>
+            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
+              Fintech
+            </div>
+          </div>
+
+          <!-- Location & Languages -->
+          <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-blue-50 p-6 rounded-xl">
+              <h3 class="font-bold text-gray-900 mb-2">📍 Based in Berlin, Germany</h3>
+              <p class="text-gray-600">Available for remote collaboration worldwide</p>
+            </div>
+
+            <div class="bg-green-50 p-6 rounded-xl">
+              <h3 class="font-bold text-gray-900 mb-2">🌍 Languages</h3>
+              <p class="text-gray-600">English, Portuguese, German</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work Section -->
+  <section id="work" class="py-20 bg-gray-50">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-5xl font-black text-gray-900 mb-16 text-center">Recent work</h2>
+
+      <!-- Work Grid -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Omio -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group">
+          <div class="h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+            <span class="text-white text-5xl">🚄</span>
+          </div>
+          <div class="p-6">
+            <div class="text-sm text-blue-600 font-semibold mb-2">CURRENT</div>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Omio</h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Leading engineering teams building travel technology solutions. Scaled platform to handle millions of bookings.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">Engineering Management</span>
+              <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">Fintech</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Omio Flex -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group">
+          <div class="h-48 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
+            <span class="text-white text-5xl">🛡️</span>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Omio Flex</h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Insurance product for flexible ticket cancellations, increasing customer confidence and reducing support load by 30%.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">Product Design</span>
+              <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-medium">Insurance</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- AI & Learning -->
+        <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group">
+          <div class="h-48 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
+            <span class="text-white text-5xl">🤖</span>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-3">AI Integration</h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Leading AI-first development initiatives and workshops to boost team productivity and innovation.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">AI</span>
+              <span class="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-xs font-medium">Innovation</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-16 bg-gray-900 text-white">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div>
+          <div class="text-4xl font-black mb-2">20+</div>
+          <div class="text-gray-400 font-medium">Years Experience</div>
+        </div>
+        <div>
+          <div class="text-4xl font-black mb-2">50+</div>
+          <div class="text-gray-400 font-medium">Team Members Led</div>
+        </div>
+        <div>
+          <div class="text-4xl font-black mb-2">99.9%</div>
+          <div class="text-gray-400 font-medium">System Uptime</div>
+        </div>
+        <div>
+          <div class="text-4xl font-black mb-2">3</div>
+          <div class="text-gray-400 font-medium">Languages</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact" class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+      <h2 class="text-5xl font-black text-gray-900 mb-6 leading-tight">
+        Great things<br/>
+        can happen<br/>
+        with a simple<br/>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">"hello!"</span>
+      </h2>
+
+      <p class="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+        Ready to build something amazing together? Let's discuss your challenges and explore innovative solutions.
+      </p>
+
+      <a href="mailto:helio.medeiros@email.com" class="inline-block bg-gray-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-gray-800 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg text-lg mb-12">
+        Contact me
+      </a>
+
+      <!-- Contact Info -->
+      <div class="flex flex-col md:flex-row justify-center items-center gap-8 text-gray-600">
+        <a href="mailto:helio.medeiros@email.com" class="hover:text-gray-900 transition-colors font-medium">
+          helio.medeiros@email.com
+        </a>
+        <span class="hidden md:block">•</span>
+        <span class="font-medium">Berlin, Germany</span>
+        <span class="hidden md:block">•</span>
+        <span class="font-medium">Available for remote work</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="text-gray-400 mb-4 md:mb-0">
+          © 2025 Helio Medeiros. All rights reserved.
+        </div>
+
+        <div class="flex space-x-6">
+          <a href="https://www.linkedin.com/in/helio-medeiros-4877123/" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+            LinkedIn
+          </a>
+          <a href="https://github.com/helio-medeiros" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+            GitHub
+          </a>
+          <a href="mailto:helio.medeiros@email.com" class="text-gray-400 hover:text-white transition-colors">
+            Email
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Update active navigation link based on scroll position
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (window.pageYOffset >= sectionTop) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('text-gray-900');
+        link.classList.add('text-gray-600');
+        if (link.getAttribute('href').slice(1) === current) {
+          link.classList.remove('text-gray-600');
+          link.classList.add('text-gray-900');
+        }
+      });
+    });
+
+    // Fade in animation on scroll
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => {
+      observer.observe(el);
+    });
+  </script>
+</Layout>
