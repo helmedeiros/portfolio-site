@@ -22,6 +22,9 @@ pnpm-debug.log*
 commit_message.tmp
 commit_message_*.tmp
 
+# development tools
+.claude/
+
 # macOS-specific files
 .DS_Store
 
