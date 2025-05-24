@@ -1,24 +1,19 @@
-feat: replace hero placeholder with professional photo display
+fix: remove children's names from about section for privacy
 
-This commit updates the hero section to display the user's actual professional
-photo instead of a static placeholder, creating a more personal and engaging
-first impression for website visitors.
+This commit updates the about section to remove specific mention of children's
+names while maintaining the personal and family-oriented tone of the content.
 
-Key changes:
-- Replaced placeholder div with proper img element in hero section
-- Added responsive image sizing with object-cover for professional appearance
-- Implemented smart fallback mechanism that shows placeholder if photo not found
-- Added proper accessibility with descriptive alt text
-- Maintained consistent styling with rounded corners and shadow effects
-- Used error handling to gracefully degrade if image file is missing
+Changes made:
+- Replaced "sketching ideas with my kids Kenzo and Hiro" with "spending time with my family"
+- Preserved the personal touch that shows work-life balance
+- Maintained professional boundaries appropriate for a public portfolio
+- Kept the content engaging while respecting family privacy
 
-Technical implementation:
-- Image path set to /helio-photo.jpg in public directory
-- Added onerror handler for seamless fallback experience
-- Preserved existing responsive grid layout and spacing
-- Maintained design consistency with border and shadow styling
+Rationale:
+This change enhances privacy protection for family members while still
+conveying that the professional has a well-rounded life outside of work.
+The updated text maintains the same warm, personal tone without exposing
+private information about children in a public-facing professional portfolio.
 
-This enhancement personalizes the portfolio while maintaining the clean,
-professional aesthetic inspired by Bastien Moiroux's design principles.
-The implementation ensures the site works whether the photo is present or not,
-providing a robust user experience.
+This ensures the website remains personal and approachable while following
+best practices for online privacy and professional presentation.
