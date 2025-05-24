@@ -1,6 +1,6 @@
 # Personal Portfolio Website
 
-A modern, minimalist personal website inspired by Bastien Moiroux's clean design aesthetic. Built with Astro and featuring a responsive design with smooth animations and professional presentation.
+A modern, minimalist personal website built with Astro and featuring a responsive design with smooth animations and professional presentation.
 
 **🌐 Live Site:** [heliomedeiros.com](https://heliomedeiros.com)
 
@@ -126,16 +126,6 @@ The website is fully responsive with breakpoints:
 - Safe DOM manipulation practices
 - Regular dependency auditing
 - See [SECURITY.md](SECURITY.md) for full details
-
-## 🎯 Inspired by Bastien Moiroux
-
-This design takes inspiration from [Bastien Moiroux's portfolio](https://bastienmoiroux.fr/) featuring:
-
-- Clean, professional layout
-- Bold typography hierarchy
-- Minimalist color palette
-- Strategic use of white space
-- Professional project presentation
 
 ## 🤝 Contributing
 
