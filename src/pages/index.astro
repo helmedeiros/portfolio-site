@@ -56,8 +56,16 @@ import Layout from '../layouts/Layout.astro';
 
         <!-- Hero Image -->
         <div class="flex justify-center lg:justify-end">
-          <div class="w-80 h-80 bg-gradient-to-br from-blue-100 to-purple-100 rounded-3xl flex items-center justify-center border border-gray-200 shadow-lg">
-            <span class="text-gray-500 text-lg font-medium">Your Photo Here</span>
+          <div class="w-80 h-80 rounded-3xl overflow-hidden border border-gray-200 shadow-lg">
+            <img
+              src="/helio-photo.jpg"
+              alt="Helio Medeiros - Engineering Leader"
+              class="w-full h-full object-cover"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="w-full h-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center text-gray-500 text-lg font-medium" style="display: none;">
+              Your Photo Here
+            </div>
           </div>
         </div>
       </div>
