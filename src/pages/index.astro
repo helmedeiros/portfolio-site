@@ -290,8 +290,13 @@ import Layout from '../layouts/Layout.astro';
       const email = getEmailParts();
       const emailDisplay = document.getElementById('email-display');
 
-      // Update the display
-      emailDisplay.innerHTML = `<a href="mailto:${email}" class="hover:text-gray-900 transition-colors font-medium">${email}</a>`;
+      // Safer DOM manipulation instead of innerHTML
+      emailDisplay.innerHTML = '';
+      const emailLink = document.createElement('a');
+      emailLink.href = `mailto:${email}`;
+      emailLink.textContent = email;
+      emailLink.className = 'hover:text-gray-900 transition-colors font-medium';
+      emailDisplay.appendChild(emailLink);
 
       // Update button text
       this.textContent = 'Email revealed!';
