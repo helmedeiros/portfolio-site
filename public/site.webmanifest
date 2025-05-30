@@ -1,0 +1,16 @@
+{
+    "name": "Helio Medeiros - Portfolio",
+    "short_name": "Helio",
+    "description": "Engineering Leader | Fintech Builder | Travel Optimist",
+    "icons": [
+        {
+            "src": "/favicon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ],
+    "theme_color": "#000000",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "start_url": "/"
+}
