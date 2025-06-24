@@ -1,4 +1,6 @@
 ---
+import GoogleAnalytics from '../components/GoogleAnalytics.astro';
+
 export interface Props {
   title: string;
   description?: string;
@@ -18,14 +20,7 @@ const { title, description = "Engineering Leader | Fintech Builder | Travel Opti
     <meta name="theme-color" content="#000000" />
     <meta name="generator" content={Astro.generator} />
 
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-97HT53QTPH"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-97HT53QTPH');
-    </script>
+    <GoogleAnalytics />
 
     <!-- Security Headers -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
