@@ -1,5 +1,6 @@
 ---
 import GoogleAnalytics from '../components/GoogleAnalytics.astro';
+import AnalyticsEvents from '../components/AnalyticsEvents.astro';
 
 export interface Props {
   title: string;
@@ -40,6 +41,7 @@ const { title, description = "Engineering Leader | Fintech Builder | Travel Opti
   </head>
   <body class="bg-white text-gray-900 font-sans antialiased">
     <slot />
+    <AnalyticsEvents />
   </body>
 </html>
 
