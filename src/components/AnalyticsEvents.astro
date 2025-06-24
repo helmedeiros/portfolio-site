@@ -73,14 +73,20 @@
         const sectionObserver = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              const sectionName = sanitizeString(entry.target.id);
-              if (sectionName && typeof window.gtag === 'function') {
-                window.gtag('event', 'section_view', {
-                  event_category: 'navigation',
-                  event_label: sectionName,
-                  custom_map: {'section_name': sectionName}
-                });
-                console.log('Enhanced Analytics: Section view tracked:', sectionName);
+              try {
+                const sectionName = sanitizeString(entry.target.id);
+                if (sectionName && typeof window.gtag === 'function') {
+                  window.gtag('event', 'section_view', {
+                    event_category: 'navigation',
+                    event_label: sectionName,
+                    custom_map: {'section_name': sectionName}
+                  });
+                  console.log('Enhanced Analytics: Section view tracked:', sectionName);
+                } else if (sectionName) {
+                  console.warn('Enhanced Analytics: gtag not available, skipping section tracking');
+                }
+              } catch (error) {
+                console.error('Enhanced Analytics: Error tracking section view:', error);
               }
             }
           });
@@ -98,13 +104,19 @@
       const setupNavigationTracking = () => {
         document.querySelectorAll('nav a[href^="#"]').forEach(link => {
           link.addEventListener('click', function(e) {
-            const section = sanitizeString(this.getAttribute('href').substring(1));
-            if (section && typeof window.gtag === 'function') {
-              window.gtag('event', 'navigation_click', {
-                event_category: 'navigation',
-                event_label: section,
-                navigation_type: 'menu'
-              });
+            try {
+              const section = sanitizeString(this.getAttribute('href').substring(1));
+              if (section && typeof window.gtag === 'function') {
+                window.gtag('event', 'navigation_click', {
+                  event_category: 'navigation',
+                  event_label: section,
+                  navigation_type: 'menu'
+                });
+              } else if (section) {
+                console.warn('Enhanced Analytics: gtag not available, skipping navigation tracking');
+              }
+            } catch (error) {
+              console.error('Enhanced Analytics: Error tracking navigation event:', error);
             }
           }, { passive: true });
         });
@@ -116,13 +128,19 @@
         const contactBtn = document.getElementById('contact-btn');
         if (contactBtn) {
           contactBtn.addEventListener('click', function() {
-            if (typeof window.gtag === 'function') {
-              window.gtag('event', 'contact_initiated', {
-                event_category: 'conversion',
-                event_label: 'hero_contact_button',
-                value: 1
-              });
-              console.log('Enhanced Analytics: Contact initiated event tracked');
+            try {
+              if (typeof window.gtag === 'function') {
+                window.gtag('event', 'contact_initiated', {
+                  event_category: 'conversion',
+                  event_label: 'hero_contact_button',
+                  value: 1
+                });
+                console.log('Enhanced Analytics: Contact initiated event tracked');
+              } else {
+                console.warn('Enhanced Analytics: gtag not available, skipping contact tracking');
+              }
+            } catch (error) {
+              console.error('Enhanced Analytics: Error tracking contact event:', error);
             }
           }, { passive: true });
         }
@@ -137,11 +155,19 @@
                   node.tagName === 'A' && node.href && node.href.startsWith('mailto:')
                 );
                 if (emailLink) {
-                  window.gtag('event', 'email_revealed', {
-                    event_category: 'conversion',
-                    event_label: 'contact_email_reveal',
-                    value: 2
-                  });
+                  try {
+                    if (typeof window.gtag === 'function') {
+                      window.gtag('event', 'email_revealed', {
+                        event_category: 'conversion',
+                        event_label: 'contact_email_reveal',
+                        value: 2
+                      });
+                    } else {
+                      console.warn('Enhanced Analytics: gtag not available, skipping email reveal tracking');
+                    }
+                  } catch (error) {
+                    console.error('Enhanced Analytics: Error tracking email reveal event:', error);
+                  }
                 }
               }
             });
@@ -161,12 +187,20 @@
             const linkUrl = this.href;
             const linkDomain = this.hostname;
 
-            window.gtag('event', 'outbound_click', {
-              event_category: 'engagement',
-              event_label: linkDomain,
-              link_text: linkText,
-              link_url: linkUrl
-            });
+            try {
+              if (typeof window.gtag === 'function') {
+                window.gtag('event', 'outbound_click', {
+                  event_category: 'engagement',
+                  event_label: linkDomain,
+                  link_text: linkText,
+                  link_url: linkUrl
+                });
+              } else {
+                console.warn('Enhanced Analytics: gtag not available, skipping outbound link tracking');
+              }
+            } catch (error) {
+              console.error('Enhanced Analytics: Error tracking outbound link event:', error);
+            }
           }, { passive: true });
         });
       };
@@ -188,11 +222,19 @@
                           milestones.forEach(milestone => {
                 if (scrollPercent >= milestone && !trackedMilestones.has(milestone)) {
                   trackedMilestones.add(milestone);
-                  window.gtag('event', 'scroll_depth', {
-                    event_category: 'engagement',
-                    event_label: `${milestone}_percent`,
-                    value: milestone
-                  });
+                  try {
+                    if (typeof window.gtag === 'function') {
+                      window.gtag('event', 'scroll_depth', {
+                        event_category: 'engagement',
+                        event_label: `${milestone}_percent`,
+                        value: milestone
+                      });
+                    } else {
+                      console.warn('Enhanced Analytics: gtag not available, skipping scroll depth tracking');
+                    }
+                  } catch (error) {
+                    console.error('Enhanced Analytics: Error tracking scroll depth event:', error);
+                  }
                 }
               });
           }
@@ -213,11 +255,19 @@
           skill.addEventListener('mouseenter', function() {
             const skillText = sanitizeString(this.textContent.trim());
             hoverTimeout = setTimeout(() => {
-              window.gtag('event', 'skill_interest', {
-                event_category: 'engagement',
-                event_label: skillText,
-                engagement_time_msec: 1000
-              });
+              try {
+                if (typeof window.gtag === 'function') {
+                  window.gtag('event', 'skill_interest', {
+                    event_category: 'engagement',
+                    event_label: skillText,
+                    engagement_time_msec: 1000
+                  });
+                } else {
+                  console.warn('Enhanced Analytics: gtag not available, skipping skill interest tracking');
+                }
+              } catch (error) {
+                console.error('Enhanced Analytics: Error tracking skill interest event:', error);
+              }
             }, 1000); // Only track if hovered for 1 second
           }, { passive: true });
 
@@ -242,10 +292,18 @@
           setupSkillTracking();
 
           // Track that enhanced analytics is loaded
-          window.gtag('event', 'analytics_enhanced_loaded', {
-            event_category: 'system',
-            event_label: 'tracking_initialized'
-          });
+          try {
+            if (typeof window.gtag === 'function') {
+              window.gtag('event', 'analytics_enhanced_loaded', {
+                event_category: 'system',
+                event_label: 'tracking_initialized'
+              });
+            } else {
+              console.warn('Enhanced Analytics: gtag not available, skipping initialization tracking');
+            }
+          } catch (error) {
+            console.error('Enhanced Analytics: Error tracking initialization event:', error);
+          }
 
           console.log('Enhanced Analytics: All tracking initialized successfully');
 
