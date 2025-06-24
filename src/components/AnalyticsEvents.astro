@@ -74,7 +74,7 @@
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               const sectionName = sanitizeString(entry.target.id);
-              if (sectionName) {
+              if (sectionName && typeof window.gtag === 'function') {
                 window.gtag('event', 'section_view', {
                   event_category: 'navigation',
                   event_label: sectionName,
@@ -99,7 +99,7 @@
         document.querySelectorAll('nav a[href^="#"]').forEach(link => {
           link.addEventListener('click', function(e) {
             const section = sanitizeString(this.getAttribute('href').substring(1));
-            if (section) {
+            if (section && typeof window.gtag === 'function') {
               window.gtag('event', 'navigation_click', {
                 event_category: 'navigation',
                 event_label: section,
@@ -116,12 +116,14 @@
         const contactBtn = document.getElementById('contact-btn');
         if (contactBtn) {
           contactBtn.addEventListener('click', function() {
-            window.gtag('event', 'contact_initiated', {
-              event_category: 'conversion',
-              event_label: 'hero_contact_button',
-              value: 1
-            });
-            console.log('Enhanced Analytics: Contact initiated event tracked');
+            if (typeof window.gtag === 'function') {
+              window.gtag('event', 'contact_initiated', {
+                event_category: 'conversion',
+                event_label: 'hero_contact_button',
+                value: 1
+              });
+              console.log('Enhanced Analytics: Contact initiated event tracked');
+            }
           }, { passive: true });
         }
 
