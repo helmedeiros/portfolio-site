@@ -9,9 +9,9 @@
     (function() {
       'use strict';
 
-            // Wait for Google Analytics to be fully loaded by listening for gtm.load event
+                  // Wait for Google Analytics to be fully loaded by listening for gtm.load event
       const waitForGoogleAnalytics = () => {
-        if (typeof gtag !== 'undefined' && window.dataLayer) {
+        if (typeof window.gtag !== 'undefined' && window.dataLayer) {
           // Check if gtm.load event has already fired
           const hasGtmLoad = window.dataLayer.some(item =>
             item && typeof item === 'object' && item.event === 'gtm.load'
@@ -75,7 +75,7 @@
             if (entry.isIntersecting) {
               const sectionName = sanitizeString(entry.target.id);
               if (sectionName) {
-                gtag('event', 'section_view', {
+                window.gtag('event', 'section_view', {
                   event_category: 'navigation',
                   event_label: sectionName,
                   custom_map: {'section_name': sectionName}
@@ -100,7 +100,7 @@
           link.addEventListener('click', function(e) {
             const section = sanitizeString(this.getAttribute('href').substring(1));
             if (section) {
-              gtag('event', 'navigation_click', {
+              window.gtag('event', 'navigation_click', {
                 event_category: 'navigation',
                 event_label: section,
                 navigation_type: 'menu'
@@ -116,7 +116,7 @@
         const contactBtn = document.getElementById('contact-btn');
         if (contactBtn) {
           contactBtn.addEventListener('click', function() {
-            gtag('event', 'contact_initiated', {
+            window.gtag('event', 'contact_initiated', {
               event_category: 'conversion',
               event_label: 'hero_contact_button',
               value: 1
@@ -135,7 +135,7 @@
                   node.tagName === 'A' && node.href && node.href.startsWith('mailto:')
                 );
                 if (emailLink) {
-                  gtag('event', 'email_revealed', {
+                  window.gtag('event', 'email_revealed', {
                     event_category: 'conversion',
                     event_label: 'contact_email_reveal',
                     value: 2
@@ -159,7 +159,7 @@
             const linkUrl = this.href;
             const linkDomain = this.hostname;
 
-            gtag('event', 'outbound_click', {
+            window.gtag('event', 'outbound_click', {
               event_category: 'engagement',
               event_label: linkDomain,
               link_text: linkText,
@@ -183,16 +183,16 @@
           if (scrollPercent > maxScroll) {
             maxScroll = scrollPercent;
 
-            milestones.forEach(milestone => {
-              if (scrollPercent >= milestone && !trackedMilestones.has(milestone)) {
-                trackedMilestones.add(milestone);
-                gtag('event', 'scroll_depth', {
-                  event_category: 'engagement',
-                  event_label: `${milestone}_percent`,
-                  value: milestone
-                });
-              }
-            });
+                          milestones.forEach(milestone => {
+                if (scrollPercent >= milestone && !trackedMilestones.has(milestone)) {
+                  trackedMilestones.add(milestone);
+                  window.gtag('event', 'scroll_depth', {
+                    event_category: 'engagement',
+                    event_label: `${milestone}_percent`,
+                    value: milestone
+                  });
+                }
+              });
           }
         }, 1000); // Throttle to once per second
 
@@ -211,7 +211,7 @@
           skill.addEventListener('mouseenter', function() {
             const skillText = sanitizeString(this.textContent.trim());
             hoverTimeout = setTimeout(() => {
-              gtag('event', 'skill_interest', {
+              window.gtag('event', 'skill_interest', {
                 event_category: 'engagement',
                 event_label: skillText,
                 engagement_time_msec: 1000
@@ -240,7 +240,7 @@
           setupSkillTracking();
 
           // Track that enhanced analytics is loaded
-          gtag('event', 'analytics_enhanced_loaded', {
+          window.gtag('event', 'analytics_enhanced_loaded', {
             event_category: 'system',
             event_label: 'tracking_initialized'
           });
