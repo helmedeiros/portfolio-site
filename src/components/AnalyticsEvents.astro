@@ -9,8 +9,19 @@
     (function() {
       'use strict';
 
-      // Safety check - only run if gtag is available
-      if (typeof gtag === 'undefined') return;
+      // Enhanced safety check - wait for gtag to be available
+      if (typeof gtag === 'undefined') {
+        // Retry after a short delay if gtag isn't ready yet
+        setTimeout(() => {
+          if (typeof gtag !== 'undefined') {
+            console.log('Enhanced Analytics: gtag loaded, initializing...');
+            initializeTracking();
+          } else {
+            console.warn('Enhanced Analytics: gtag not available, skipping');
+          }
+        }, 1000);
+        return;
+      }
 
       // Utility functions
       const throttle = (func, wait) => {
@@ -46,6 +57,7 @@
                   event_label: sectionName,
                   custom_map: {'section_name': sectionName}
                 });
+                console.log('Enhanced Analytics: Section view tracked:', sectionName);
               }
             }
           });
@@ -86,6 +98,7 @@
               event_label: 'hero_contact_button',
               value: 1
             });
+            console.log('Enhanced Analytics: Contact initiated event tracked');
           }, { passive: true });
         }
 
@@ -191,9 +204,11 @@
         });
       };
 
-      // Initialize all tracking when DOM is ready
+            // Initialize all tracking when DOM is ready
       const initializeTracking = () => {
         try {
+          console.log('Enhanced Analytics: Initializing tracking...');
+
           setupSectionTracking();
           setupNavigationTracking();
           setupConversionTracking();
@@ -207,9 +222,11 @@
             event_label: 'tracking_initialized'
           });
 
+          console.log('Enhanced Analytics: All tracking initialized successfully');
+
         } catch (error) {
-          // Silently fail - don't break the site
-          console.warn('Analytics tracking initialization failed:', error);
+          // Log error for debugging but don't break the site
+          console.error('Enhanced Analytics: Initialization failed:', error);
         }
       };
 
