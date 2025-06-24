@@ -9,28 +9,42 @@
     (function() {
       'use strict';
 
-      // Enhanced safety check - wait for gtag to be available with multiple retries
-      const waitForGtag = (attempt = 1, maxAttempts = 10) => {
+            // Wait for Google Analytics to be fully loaded by listening for gtm.load event
+      const waitForGoogleAnalytics = () => {
         if (typeof gtag !== 'undefined' && window.dataLayer) {
-          console.log(`Enhanced Analytics: gtag and dataLayer loaded on attempt ${attempt}, initializing...`);
-          initializeTracking();
-          return;
-        }
+          // Check if gtm.load event has already fired
+          const hasGtmLoad = window.dataLayer.some(item =>
+            item && typeof item === 'object' && item.event === 'gtm.load'
+          );
 
-        if (attempt < maxAttempts) {
-          const delay = attempt * 500; // Increasing delay: 500ms, 1s, 1.5s, etc.
-          console.log(`Enhanced Analytics: gtag not ready, retrying in ${delay}ms (attempt ${attempt}/${maxAttempts})`);
-          setTimeout(() => waitForGtag(attempt + 1, maxAttempts), delay);
-        } else {
-          console.warn('Enhanced Analytics: gtag not available after all retries, skipping');
+          if (hasGtmLoad) {
+            console.log('Enhanced Analytics: Google Analytics fully loaded, initializing...');
+            initializeTracking();
+            return true;
+          }
         }
+        return false;
       };
 
-      if (typeof gtag === 'undefined' || !window.dataLayer) {
-        console.log('Enhanced Analytics: gtag or dataLayer not ready, waiting...');
-        waitForGtag();
+      // Try immediate initialization first
+      if (waitForGoogleAnalytics()) {
         return;
       }
+
+      // If not ready, listen for gtag to become available and gtm.load event
+      console.log('Enhanced Analytics: Waiting for Google Analytics to fully load...');
+
+      const checkInterval = setInterval(() => {
+        if (waitForGoogleAnalytics()) {
+          clearInterval(checkInterval);
+        }
+      }, 200); // Check every 200ms
+
+      // Fallback timeout after 10 seconds
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        console.warn('Enhanced Analytics: Timeout waiting for Google Analytics, skipping');
+      }, 10000);
 
       // Utility functions
       const throttle = (func, wait) => {
