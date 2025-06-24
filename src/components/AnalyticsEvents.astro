@@ -9,17 +9,26 @@
     (function() {
       'use strict';
 
-      // Enhanced safety check - wait for gtag to be available
-      if (typeof gtag === 'undefined') {
-        // Retry after a short delay if gtag isn't ready yet
-        setTimeout(() => {
-          if (typeof gtag !== 'undefined') {
-            console.log('Enhanced Analytics: gtag loaded, initializing...');
-            initializeTracking();
-          } else {
-            console.warn('Enhanced Analytics: gtag not available, skipping');
-          }
-        }, 1000);
+      // Enhanced safety check - wait for gtag to be available with multiple retries
+      const waitForGtag = (attempt = 1, maxAttempts = 10) => {
+        if (typeof gtag !== 'undefined' && window.dataLayer) {
+          console.log(`Enhanced Analytics: gtag and dataLayer loaded on attempt ${attempt}, initializing...`);
+          initializeTracking();
+          return;
+        }
+
+        if (attempt < maxAttempts) {
+          const delay = attempt * 500; // Increasing delay: 500ms, 1s, 1.5s, etc.
+          console.log(`Enhanced Analytics: gtag not ready, retrying in ${delay}ms (attempt ${attempt}/${maxAttempts})`);
+          setTimeout(() => waitForGtag(attempt + 1, maxAttempts), delay);
+        } else {
+          console.warn('Enhanced Analytics: gtag not available after all retries, skipping');
+        }
+      };
+
+      if (typeof gtag === 'undefined' || !window.dataLayer) {
+        console.log('Enhanced Analytics: gtag or dataLayer not ready, waiting...');
+        waitForGtag();
         return;
       }
 
