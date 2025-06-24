@@ -4,10 +4,18 @@ const isProd = import.meta.env.PROD;
 const GA_MEASUREMENT_ID = 'G-GL0Q1PNV4W';
 ---
 
+<script is:inline>
+  console.log('GoogleAnalytics component loaded, isProd check:', window.location.hostname !== 'localhost');
+</script>
+
 {isProd && (
   <>
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}></script>
+    <script is:inline>
+      console.log('GoogleAnalytics: Production mode confirmed, loading GA scripts...');
+    </script>
+    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} onload="console.log('GA script loaded successfully')" onerror="console.error('GA script failed to load')"></script>
     <script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
+      console.log('GA inline script executing, measurement ID:', GA_MEASUREMENT_ID);
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -15,6 +23,14 @@ const GA_MEASUREMENT_ID = 'G-GL0Q1PNV4W';
         'cookie_domain': 'heliomedeiros.com',
         'cookie_flags': 'SameSite=None;Secure'
       });
+      console.log('GA gtag configured, dataLayer:', window.dataLayer);
+      console.log('gtag function available:', typeof gtag);
     </script>
   </>
+)}
+
+{!isProd && (
+  <script is:inline>
+    console.log('GoogleAnalytics: Development mode - GA scripts not loaded');
+  </script>
 )}
