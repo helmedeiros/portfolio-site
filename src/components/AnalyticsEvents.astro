@@ -1,0 +1,225 @@
+---
+// Analytics Events Component - Only loads in production with GA
+---
+
+{import.meta.env.PROD && (
+  <script is:inline>
+    // Enhanced Analytics Events for Single Page Portfolio
+    // Only execute when Google Analytics is available
+    (function() {
+      'use strict';
+
+      // Safety check - only run if gtag is available
+      if (typeof gtag === 'undefined') return;
+
+      // Utility functions
+      const throttle = (func, wait) => {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      };
+
+      const sanitizeString = (str) => {
+        return str ? str.replace(/[<>\"']/g, '').substring(0, 100) : '';
+      };
+
+      // Track section views using Intersection Observer (performance optimized)
+      const setupSectionTracking = () => {
+        const observerOptions = {
+          threshold: 0.6, // 60% visible
+          rootMargin: '-80px 0px'
+        };
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const sectionName = sanitizeString(entry.target.id);
+              if (sectionName) {
+                gtag('event', 'section_view', {
+                  event_category: 'navigation',
+                  event_label: sectionName,
+                  custom_map: {'section_name': sectionName}
+                });
+              }
+            }
+          });
+        }, observerOptions);
+
+        // Observe all sections with IDs
+        document.querySelectorAll('section[id]').forEach(section => {
+          sectionObserver.observe(section);
+        });
+
+        return sectionObserver;
+      };
+
+      // Track navigation menu clicks
+      const setupNavigationTracking = () => {
+        document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+          link.addEventListener('click', function(e) {
+            const section = sanitizeString(this.getAttribute('href').substring(1));
+            if (section) {
+              gtag('event', 'navigation_click', {
+                event_category: 'navigation',
+                event_label: section,
+                navigation_type: 'menu'
+              });
+            }
+          }, { passive: true });
+        });
+      };
+
+      // Track critical conversion events
+      const setupConversionTracking = () => {
+        // Contact button interaction
+        const contactBtn = document.getElementById('contact-btn');
+        if (contactBtn) {
+          contactBtn.addEventListener('click', function() {
+            gtag('event', 'contact_initiated', {
+              event_category: 'conversion',
+              event_label: 'hero_contact_button',
+              value: 1
+            });
+          }, { passive: true });
+        }
+
+        // Email reveal tracking
+        const emailDisplay = document.getElementById('email-display');
+        if (emailDisplay) {
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                const emailLink = Array.from(mutation.addedNodes).find(node =>
+                  node.tagName === 'A' && node.href && node.href.startsWith('mailto:')
+                );
+                if (emailLink) {
+                  gtag('event', 'email_revealed', {
+                    event_category: 'conversion',
+                    event_label: 'contact_email_reveal',
+                    value: 2
+                  });
+                }
+              }
+            });
+          });
+          observer.observe(emailDisplay, { childList: true });
+        }
+      };
+
+      // Track external link clicks
+      const setupExternalLinkTracking = () => {
+        document.querySelectorAll('a[href^="http"]').forEach(link => {
+          // Skip if it's the same domain
+          if (link.hostname === window.location.hostname) return;
+
+          link.addEventListener('click', function(e) {
+            const linkText = sanitizeString(this.textContent.trim());
+            const linkUrl = this.href;
+            const linkDomain = this.hostname;
+
+            gtag('event', 'outbound_click', {
+              event_category: 'engagement',
+              event_label: linkDomain,
+              link_text: linkText,
+              link_url: linkUrl
+            });
+          }, { passive: true });
+        });
+      };
+
+      // Track scroll depth milestones (throttled for performance)
+      const setupScrollTracking = () => {
+        let maxScroll = 0;
+        const milestones = [25, 50, 75, 90];
+        const trackedMilestones = new Set();
+
+        const trackScrollDepth = throttle(() => {
+          const scrollPercent = Math.round(
+            (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+          );
+
+          if (scrollPercent > maxScroll) {
+            maxScroll = scrollPercent;
+
+            milestones.forEach(milestone => {
+              if (scrollPercent >= milestone && !trackedMilestones.has(milestone)) {
+                trackedMilestones.add(milestone);
+                gtag('event', 'scroll_depth', {
+                  event_category: 'engagement',
+                  event_label: `${milestone}_percent`,
+                  value: milestone
+                });
+              }
+            });
+          }
+        }, 1000); // Throttle to once per second
+
+        window.addEventListener('scroll', trackScrollDepth, { passive: true });
+
+        return () => {
+          window.removeEventListener('scroll', trackScrollDepth);
+        };
+      };
+
+      // Track skill hover interactions (portfolio-specific)
+      const setupSkillTracking = () => {
+        document.querySelectorAll('.bg-gray-50.p-4.rounded-xl').forEach(skill => {
+          let hoverTimeout;
+
+          skill.addEventListener('mouseenter', function() {
+            const skillText = sanitizeString(this.textContent.trim());
+            hoverTimeout = setTimeout(() => {
+              gtag('event', 'skill_interest', {
+                event_category: 'engagement',
+                event_label: skillText,
+                engagement_time_msec: 1000
+              });
+            }, 1000); // Only track if hovered for 1 second
+          }, { passive: true });
+
+          skill.addEventListener('mouseleave', function() {
+            if (hoverTimeout) {
+              clearTimeout(hoverTimeout);
+            }
+          }, { passive: true });
+        });
+      };
+
+      // Initialize all tracking when DOM is ready
+      const initializeTracking = () => {
+        try {
+          setupSectionTracking();
+          setupNavigationTracking();
+          setupConversionTracking();
+          setupExternalLinkTracking();
+          setupScrollTracking();
+          setupSkillTracking();
+
+          // Track that enhanced analytics is loaded
+          gtag('event', 'analytics_enhanced_loaded', {
+            event_category: 'system',
+            event_label: 'tracking_initialized'
+          });
+
+        } catch (error) {
+          // Silently fail - don't break the site
+          console.warn('Analytics tracking initialization failed:', error);
+        }
+      };
+
+      // Initialize when DOM is ready
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeTracking);
+      } else {
+        initializeTracking();
+      }
+
+    })();
+  </script>
+)}
