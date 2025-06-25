@@ -1,14 +1,12 @@
 ---
-// Analytics Events Component - Simple and reliable approach
+// Analytics Events Component - Production ready
 ---
 
 {import.meta.env.PROD && (
   <script is:inline>
-    // Simple Enhanced Analytics Events - Direct gtag approach
+    // Enhanced Analytics Events - Production version
     (function() {
       'use strict';
-
-      console.log('Enhanced Analytics: Starting initialization...');
 
       // Utility functions
       const throttle = (func, wait) => {
@@ -32,10 +30,8 @@
         try {
           if (typeof window.gtag === 'function') {
             window.gtag('event', eventName, parameters);
-            console.log('Enhanced Analytics: Event tracked:', eventName, parameters);
           } else {
-            console.warn('Enhanced Analytics: gtag not available, queuing event:', eventName);
-            // Queue the event for when gtag becomes available
+            // Queue event for when gtag becomes available
             window.dataLayer = window.dataLayer || [];
             window.dataLayer.push({
               'event': eventName,
@@ -43,7 +39,7 @@
             });
           }
         } catch (error) {
-          console.error('Enhanced Analytics: Error tracking event:', eventName, error);
+          console.error('Analytics tracking error:', error);
         }
       };
 
@@ -203,24 +199,14 @@
       // Initialize all tracking
       const initializeTracking = () => {
         try {
-          console.log('Enhanced Analytics: Initializing all tracking...');
-
           setupSectionTracking();
           setupNavigationTracking();
           setupConversionTracking();
           setupExternalLinkTracking();
           setupScrollTracking();
           setupSkillTracking();
-
-          // Track that enhanced analytics is loaded
-          trackEvent('analytics_enhanced_loaded', {
-            'event_category': 'system',
-            'event_label': 'tracking_initialized'
-          });
-
-          console.log('Enhanced Analytics: All tracking initialized successfully');
         } catch (error) {
-          console.error('Enhanced Analytics: Initialization failed:', error);
+          console.error('Analytics initialization error:', error);
         }
       };
 
