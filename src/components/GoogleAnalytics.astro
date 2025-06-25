@@ -1,35 +1,53 @@
 ---
-// Only load Google Analytics in production
-const isProd = import.meta.env.PROD;
-const GA_MEASUREMENT_ID = 'G-GL0Q1PNV4W';
+// Google Analytics 4 Component - Simplified and reliable approach
 ---
 
-<script is:inline>
-  console.log('GoogleAnalytics component loaded, isProd check:', window.location.hostname !== 'localhost');
-</script>
+{import.meta.env.PROD && (
+  <script is:inline>
+    // Simplified GA4 implementation for better reliability
+    console.log('GoogleAnalytics component loaded, isProd check:', true);
 
-{isProd && (
-  <>
-    <script is:inline>
-      console.log('GoogleAnalytics: Production mode confirmed, loading GA scripts...');
-    </script>
-    <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} onload="console.log('GA script loaded successfully')" onerror="console.error('GA script failed to load')"></script>
-    <script is:inline define:vars={{ GA_MEASUREMENT_ID }}>
-      console.log('GA inline script executing, measurement ID:', GA_MEASUREMENT_ID);
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', GA_MEASUREMENT_ID, {
-        'cookie_domain': 'heliomedeiros.com',
-        'cookie_flags': 'SameSite=None;Secure'
+    const measurementId = 'G-GL0Q1PNV4W';
+    console.log('GoogleAnalytics: Production mode confirmed, loading GA scripts...');
+
+    // Initialize dataLayer before loading GA script
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+
+    // Make gtag globally available immediately
+    window.gtag = gtag;
+
+    // Configure with timestamp
+    gtag('js', new Date());
+    gtag('config', measurementId, {
+      cookie_domain: 'heliomedeiros.com',
+      cookie_flags: 'SameSite=None;Secure'
+    });
+
+    // Load Google Analytics script
+    const gaScript = document.createElement('script');
+    gaScript.async = true;
+    gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
+    document.head.appendChild(gaScript);
+
+    gaScript.onload = function() {
+      console.log('GA script loaded successfully');
+      console.log('gtag function available:', typeof window.gtag === 'function');
+
+      // Send a test event to confirm everything is working
+      gtag('event', 'ga_loaded', {
+        event_category: 'system',
+        event_label: 'analytics_ready'
       });
-      console.log('GA gtag configured, dataLayer:', window.dataLayer);
-      console.log('gtag function available:', typeof gtag);
-    </script>
-  </>
+    };
+
+    gaScript.onerror = function() {
+      console.error('Failed to load Google Analytics script');
+    };
+  </script>
 )}
 
-{!isProd && (
+{!import.meta.env.PROD && (
   <script is:inline>
     console.log('GoogleAnalytics: Development mode - GA scripts not loaded');
   </script>
