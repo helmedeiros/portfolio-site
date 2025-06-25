@@ -1,50 +1,14 @@
 ---
-// Analytics Events Component - Only loads in production with GA
+// Analytics Events Component - Simple and reliable approach
 ---
 
 {import.meta.env.PROD && (
   <script is:inline>
-    // Enhanced Analytics Events for Single Page Portfolio
-    // Only execute when Google Analytics is available
+    // Simple Enhanced Analytics Events - Direct gtag approach
     (function() {
       'use strict';
 
-                  // Wait for Google Analytics to be fully loaded by listening for gtm.load event
-      const waitForGoogleAnalytics = () => {
-        if (typeof window.gtag !== 'undefined' && window.dataLayer) {
-          // Check if gtm.load event has already fired
-          const hasGtmLoad = window.dataLayer.some(item =>
-            item && typeof item === 'object' && item.event === 'gtm.load'
-          );
-
-          if (hasGtmLoad) {
-            console.log('Enhanced Analytics: Google Analytics fully loaded, initializing...');
-            initializeTracking();
-            return true;
-          }
-        }
-        return false;
-      };
-
-      // Try immediate initialization first
-      if (waitForGoogleAnalytics()) {
-        return;
-      }
-
-      // If not ready, listen for gtag to become available and gtm.load event
-      console.log('Enhanced Analytics: Waiting for Google Analytics to fully load...');
-
-      const checkInterval = setInterval(() => {
-        if (waitForGoogleAnalytics()) {
-          clearInterval(checkInterval);
-        }
-      }, 200); // Check every 200ms
-
-      // Fallback timeout after 10 seconds
-      setTimeout(() => {
-        clearInterval(checkInterval);
-        console.warn('Enhanced Analytics: Timeout waiting for Google Analytics, skipping');
-      }, 10000);
+      console.log('Enhanced Analytics: Starting initialization...');
 
       // Utility functions
       const throttle = (func, wait) => {
@@ -63,60 +27,64 @@
         return str ? str.replace(/[<>\"']/g, '').substring(0, 100) : '';
       };
 
-      // Track section views using Intersection Observer (performance optimized)
+      // Safe event tracking function
+      const trackEvent = (eventName, parameters = {}) => {
+        try {
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', eventName, parameters);
+            console.log('Enhanced Analytics: Event tracked:', eventName, parameters);
+          } else {
+            console.warn('Enhanced Analytics: gtag not available, queuing event:', eventName);
+            // Queue the event for when gtag becomes available
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+              'event': eventName,
+              ...parameters
+            });
+          }
+        } catch (error) {
+          console.error('Enhanced Analytics: Error tracking event:', eventName, error);
+        }
+      };
+
+      // Track section views using Intersection Observer
       const setupSectionTracking = () => {
         const observerOptions = {
-          threshold: 0.6, // 60% visible
+          threshold: 0.6,
           rootMargin: '-80px 0px'
         };
 
         const sectionObserver = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              try {
-                const sectionName = sanitizeString(entry.target.id);
-                if (sectionName && typeof window.gtag === 'function') {
-                  window.gtag('event', 'section_view', {
-                    event_category: 'navigation',
-                    event_label: sectionName,
-                    custom_map: {'section_name': sectionName}
-                  });
-                  console.log('Enhanced Analytics: Section view tracked:', sectionName);
-                } else if (sectionName) {
-                  console.warn('Enhanced Analytics: gtag not available, skipping section tracking');
-                }
-              } catch (error) {
-                console.error('Enhanced Analytics: Error tracking section view:', error);
+              const sectionName = sanitizeString(entry.target.id);
+              if (sectionName) {
+                trackEvent('section_view', {
+                  'event_category': 'navigation',
+                  'event_label': sectionName,
+                  'section_name': sectionName
+                });
               }
             }
           });
         }, observerOptions);
 
-        // Observe all sections with IDs
         document.querySelectorAll('section[id]').forEach(section => {
           sectionObserver.observe(section);
         });
-
-        return sectionObserver;
       };
 
       // Track navigation menu clicks
       const setupNavigationTracking = () => {
         document.querySelectorAll('nav a[href^="#"]').forEach(link => {
           link.addEventListener('click', function(e) {
-            try {
-              const section = sanitizeString(this.getAttribute('href').substring(1));
-              if (section && typeof window.gtag === 'function') {
-                window.gtag('event', 'navigation_click', {
-                  event_category: 'navigation',
-                  event_label: section,
-                  navigation_type: 'menu'
-                });
-              } else if (section) {
-                console.warn('Enhanced Analytics: gtag not available, skipping navigation tracking');
-              }
-            } catch (error) {
-              console.error('Enhanced Analytics: Error tracking navigation event:', error);
+            const section = sanitizeString(this.getAttribute('href').substring(1));
+            if (section) {
+              trackEvent('navigation_click', {
+                'event_category': 'navigation',
+                'event_label': section,
+                'navigation_type': 'menu'
+              });
             }
           }, { passive: true });
         });
@@ -128,20 +96,11 @@
         const contactBtn = document.getElementById('contact-btn');
         if (contactBtn) {
           contactBtn.addEventListener('click', function() {
-            try {
-              if (typeof window.gtag === 'function') {
-                window.gtag('event', 'contact_initiated', {
-                  event_category: 'conversion',
-                  event_label: 'hero_contact_button',
-                  value: 1
-                });
-                console.log('Enhanced Analytics: Contact initiated event tracked');
-              } else {
-                console.warn('Enhanced Analytics: gtag not available, skipping contact tracking');
-              }
-            } catch (error) {
-              console.error('Enhanced Analytics: Error tracking contact event:', error);
-            }
+            trackEvent('contact_initiated', {
+              'event_category': 'conversion',
+              'event_label': 'hero_contact_button',
+              'value': 1
+            });
           }, { passive: true });
         }
 
@@ -155,19 +114,11 @@
                   node.tagName === 'A' && node.href && node.href.startsWith('mailto:')
                 );
                 if (emailLink) {
-                  try {
-                    if (typeof window.gtag === 'function') {
-                      window.gtag('event', 'email_revealed', {
-                        event_category: 'conversion',
-                        event_label: 'contact_email_reveal',
-                        value: 2
-                      });
-                    } else {
-                      console.warn('Enhanced Analytics: gtag not available, skipping email reveal tracking');
-                    }
-                  } catch (error) {
-                    console.error('Enhanced Analytics: Error tracking email reveal event:', error);
-                  }
+                  trackEvent('email_revealed', {
+                    'event_category': 'conversion',
+                    'event_label': 'contact_email_reveal',
+                    'value': 2
+                  });
                 }
               }
             });
@@ -179,7 +130,6 @@
       // Track external link clicks
       const setupExternalLinkTracking = () => {
         document.querySelectorAll('a[href^="http"]').forEach(link => {
-          // Skip if it's the same domain
           if (link.hostname === window.location.hostname) return;
 
           link.addEventListener('click', function(e) {
@@ -187,25 +137,17 @@
             const linkUrl = this.href;
             const linkDomain = this.hostname;
 
-            try {
-              if (typeof window.gtag === 'function') {
-                window.gtag('event', 'outbound_click', {
-                  event_category: 'engagement',
-                  event_label: linkDomain,
-                  link_text: linkText,
-                  link_url: linkUrl
-                });
-              } else {
-                console.warn('Enhanced Analytics: gtag not available, skipping outbound link tracking');
-              }
-            } catch (error) {
-              console.error('Enhanced Analytics: Error tracking outbound link event:', error);
-            }
+            trackEvent('outbound_click', {
+              'event_category': 'engagement',
+              'event_label': linkDomain,
+              'link_text': linkText,
+              'link_url': linkUrl
+            });
           }, { passive: true });
         });
       };
 
-      // Track scroll depth milestones (throttled for performance)
+      // Track scroll depth milestones
       const setupScrollTracking = () => {
         let maxScroll = 0;
         const milestones = [25, 50, 75, 90];
@@ -218,36 +160,23 @@
 
           if (scrollPercent > maxScroll) {
             maxScroll = scrollPercent;
-
-                          milestones.forEach(milestone => {
-                if (scrollPercent >= milestone && !trackedMilestones.has(milestone)) {
-                  trackedMilestones.add(milestone);
-                  try {
-                    if (typeof window.gtag === 'function') {
-                      window.gtag('event', 'scroll_depth', {
-                        event_category: 'engagement',
-                        event_label: `${milestone}_percent`,
-                        value: milestone
-                      });
-                    } else {
-                      console.warn('Enhanced Analytics: gtag not available, skipping scroll depth tracking');
-                    }
-                  } catch (error) {
-                    console.error('Enhanced Analytics: Error tracking scroll depth event:', error);
-                  }
-                }
-              });
+            milestones.forEach(milestone => {
+              if (scrollPercent >= milestone && !trackedMilestones.has(milestone)) {
+                trackedMilestones.add(milestone);
+                trackEvent('scroll_depth', {
+                  'event_category': 'engagement',
+                  'event_label': `${milestone}_percent`,
+                  'value': milestone
+                });
+              }
+            });
           }
-        }, 1000); // Throttle to once per second
+        }, 1000);
 
         window.addEventListener('scroll', trackScrollDepth, { passive: true });
-
-        return () => {
-          window.removeEventListener('scroll', trackScrollDepth);
-        };
       };
 
-      // Track skill hover interactions (portfolio-specific)
+      // Track skill hover interactions
       const setupSkillTracking = () => {
         document.querySelectorAll('.bg-gray-50.p-4.rounded-xl').forEach(skill => {
           let hoverTimeout;
@@ -255,20 +184,12 @@
           skill.addEventListener('mouseenter', function() {
             const skillText = sanitizeString(this.textContent.trim());
             hoverTimeout = setTimeout(() => {
-              try {
-                if (typeof window.gtag === 'function') {
-                  window.gtag('event', 'skill_interest', {
-                    event_category: 'engagement',
-                    event_label: skillText,
-                    engagement_time_msec: 1000
-                  });
-                } else {
-                  console.warn('Enhanced Analytics: gtag not available, skipping skill interest tracking');
-                }
-              } catch (error) {
-                console.error('Enhanced Analytics: Error tracking skill interest event:', error);
-              }
-            }, 1000); // Only track if hovered for 1 second
+              trackEvent('skill_interest', {
+                'event_category': 'engagement',
+                'event_label': skillText,
+                'engagement_time_msec': 1000
+              });
+            }, 1000);
           }, { passive: true });
 
           skill.addEventListener('mouseleave', function() {
@@ -279,10 +200,10 @@
         });
       };
 
-            // Initialize all tracking when DOM is ready
+      // Initialize all tracking
       const initializeTracking = () => {
         try {
-          console.log('Enhanced Analytics: Initializing tracking...');
+          console.log('Enhanced Analytics: Initializing all tracking...');
 
           setupSectionTracking();
           setupNavigationTracking();
@@ -292,28 +213,18 @@
           setupSkillTracking();
 
           // Track that enhanced analytics is loaded
-          try {
-            if (typeof window.gtag === 'function') {
-              window.gtag('event', 'analytics_enhanced_loaded', {
-                event_category: 'system',
-                event_label: 'tracking_initialized'
-              });
-            } else {
-              console.warn('Enhanced Analytics: gtag not available, skipping initialization tracking');
-            }
-          } catch (error) {
-            console.error('Enhanced Analytics: Error tracking initialization event:', error);
-          }
+          trackEvent('analytics_enhanced_loaded', {
+            'event_category': 'system',
+            'event_label': 'tracking_initialized'
+          });
 
           console.log('Enhanced Analytics: All tracking initialized successfully');
-
         } catch (error) {
-          // Log error for debugging but don't break the site
           console.error('Enhanced Analytics: Initialization failed:', error);
         }
       };
 
-      // Initialize when DOM is ready
+      // Start when DOM is ready
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initializeTracking);
       } else {

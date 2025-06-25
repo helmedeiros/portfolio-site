@@ -32,7 +32,13 @@ global.MutationObserver = vi.fn().mockImplementation((callback) => ({
 // Reset mocks before each test
 beforeEach(() => {
   vi.clearAllMocks();
-  global.dataLayer.length = 0;
+
+  // Reset dataLayer properly
+  global.dataLayer = [];
+  window.dataLayer = global.dataLayer;
+
+  // Reset gtag
+  global.gtag = vi.fn();
   delete window.gtag;
   window.gtag = global.gtag;
 });
