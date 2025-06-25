@@ -74,13 +74,22 @@
       const setupNavigationTracking = () => {
         document.querySelectorAll('nav a[href^="#"]').forEach(link => {
           link.addEventListener('click', function(e) {
-            const section = sanitizeString(this.getAttribute('href').substring(1));
-            if (section) {
-              trackEvent('navigation_click', {
-                'event_category': 'navigation',
-                'event_label': section,
-                'navigation_type': 'menu'
-              });
+            try {
+              const href = this.getAttribute('href');
+              // Skip if href is just '#' or empty
+              if (!href || href === '#') {
+                return;
+              }
+              const section = sanitizeString(href.substring(1));
+              if (section) {
+                trackEvent('navigation_click', {
+                  'event_category': 'navigation',
+                  'event_label': section,
+                  'navigation_type': 'menu'
+                });
+              }
+            } catch (error) {
+              console.error('Analytics navigation tracking error:', error);
             }
           }, { passive: true });
         });
@@ -150,22 +159,35 @@
         const trackedMilestones = new Set();
 
         const trackScrollDepth = throttle(() => {
-          const scrollPercent = Math.round(
-            (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100
-          );
+          try {
+            const scrollHeight = document.documentElement.scrollHeight;
+            const windowHeight = window.innerHeight;
+            const scrollTop = window.pageYOffset;
 
-          if (scrollPercent > maxScroll) {
-            maxScroll = scrollPercent;
-            milestones.forEach(milestone => {
-              if (scrollPercent >= milestone && !trackedMilestones.has(milestone)) {
-                trackedMilestones.add(milestone);
-                trackEvent('scroll_depth', {
-                  'event_category': 'engagement',
-                  'event_label': `${milestone}_percent`,
-                  'value': milestone
-                });
-              }
-            });
+            // Prevent division by zero
+            if (scrollHeight <= windowHeight) {
+              return;
+            }
+
+            const scrollPercent = Math.round(
+              (scrollTop / (scrollHeight - windowHeight)) * 100
+            );
+
+            if (scrollPercent > maxScroll) {
+              maxScroll = scrollPercent;
+              milestones.forEach(milestone => {
+                if (scrollPercent >= milestone && !trackedMilestones.has(milestone)) {
+                  trackedMilestones.add(milestone);
+                  trackEvent('scroll_depth', {
+                    'event_category': 'engagement',
+                    'event_label': `${milestone}_percent`,
+                    'value': milestone
+                  });
+                }
+              });
+            }
+          } catch (error) {
+            console.error('Analytics scroll tracking error:', error);
           }
         }, 1000);
 
