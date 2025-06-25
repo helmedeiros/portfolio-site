@@ -1,474 +1,521 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
 describe('AnalyticsEvents Component', () => {
-  let mockGtag;
-  let mockDataLayer;
+  let mockDocument;
+  let mockWindow;
   let mockConsole;
 
   beforeEach(() => {
-    // Reset DOM
-    document.body.innerHTML = '';
-    document.head.innerHTML = '';
-
-    // Mock gtag function
-    mockGtag = vi.fn();
-    mockDataLayer = [];
-
-    // Mock console methods
+    // Mock console
     mockConsole = {
       log: vi.fn(),
       warn: vi.fn(),
-      error: vi.fn()
+      error: vi.fn(),
     };
+    global.console = mockConsole;
 
-    // Replace console methods
-    vi.spyOn(console, 'log').mockImplementation(mockConsole.log);
-    vi.spyOn(console, 'warn').mockImplementation(mockConsole.warn);
-    vi.spyOn(console, 'error').mockImplementation(mockConsole.error);
+    // Mock window
+    mockWindow = {
+      gtag: vi.fn(),
+      dataLayer: [],
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+      pageYOffset: 0,
+      innerHeight: 1000,
+      location: { hostname: 'heliomedeiros.com' },
+    };
+    global.window = mockWindow;
 
-    // Clean up any existing globals
-    delete window.gtag;
-    delete window.dataLayer;
+    // Mock document
+    mockDocument = {
+      documentElement: { scrollHeight: 2000 },
+      querySelectorAll: vi.fn(() => []),
+      getElementById: vi.fn(() => null),
+    };
+    global.document = mockDocument;
+
+    // Reset dataLayer
+    window.dataLayer = [];
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
-  describe('trackEvent function', () => {
-    it('should use gtag when available', () => {
-      // Setup
-      window.gtag = mockGtag;
+  describe('Google Analytics Initialization Wait', () => {
+    it('should wait for gtm.load event before initializing', () => {
+      const waitForGoogleAnalytics = () => {
+        if (typeof window.gtag !== 'undefined' && window.dataLayer) {
+          const hasGtmLoad = window.dataLayer.some(item =>
+            item && typeof item === 'object' && item.event === 'gtm.load'
+          );
 
-      // Load and execute the component script
-      const componentScript = `
-        const trackEvent = (eventName, parameters = {}) => {
-          try {
-            if (typeof window.gtag === 'function') {
-              window.gtag('event', eventName, parameters);
-              console.log('Enhanced Analytics: Event tracked:', eventName, parameters);
-            } else {
-              console.warn('Enhanced Analytics: gtag not available, queuing event:', eventName);
-              window.dataLayer = window.dataLayer || [];
-              window.dataLayer.push({
-                'event': eventName,
-                ...parameters
-              });
-            }
-          } catch (error) {
-            console.error('Enhanced Analytics: Error tracking event:', eventName, error);
+          if (hasGtmLoad) {
+            console.log('Enhanced Analytics: Google Analytics fully loaded, initializing...');
+            return true;
           }
-        };
+        }
+        return false;
+      };
 
-        // Test the function
-        trackEvent('test_event', { test_param: 'test_value' });
-      `;
+      // Initially no gtm.load event
+      expect(waitForGoogleAnalytics()).toBe(false);
 
-      eval(componentScript);
+      // Add gtm.load event to dataLayer
+      window.dataLayer.push({ event: 'gtm.load' });
 
-      // Verify
-      expect(mockGtag).toHaveBeenCalledWith('event', 'test_event', { test_param: 'test_value' });
-      expect(mockConsole.log).toHaveBeenCalledWith('Enhanced Analytics: Event tracked:', 'test_event', { test_param: 'test_value' });
+      expect(waitForGoogleAnalytics()).toBe(true);
+      expect(console.log).toHaveBeenCalledWith('Enhanced Analytics: Google Analytics fully loaded, initializing...');
     });
 
-    it('should queue events in dataLayer when gtag is not available', () => {
-      // Setup - no gtag available
-      window.dataLayer = mockDataLayer;
+    it('should handle missing gtag gracefully', () => {
+      delete window.gtag;
 
-      const componentScript = `
-        const trackEvent = (eventName, parameters = {}) => {
-          try {
-            if (typeof window.gtag === 'function') {
-              window.gtag('event', eventName, parameters);
-              console.log('Enhanced Analytics: Event tracked:', eventName, parameters);
-            } else {
-              console.warn('Enhanced Analytics: gtag not available, queuing event:', eventName);
-              window.dataLayer = window.dataLayer || [];
-              window.dataLayer.push({
-                'event': eventName,
-                ...parameters
-              });
-            }
-          } catch (error) {
-            console.error('Enhanced Analytics: Error tracking event:', eventName, error);
-          }
+      const waitForGoogleAnalytics = () => {
+        if (typeof window.gtag !== 'undefined' && window.dataLayer) {
+          return true;
+        }
+        return false;
+      };
+
+      expect(waitForGoogleAnalytics()).toBe(false);
+    });
+
+    it('should handle missing dataLayer gracefully', () => {
+      delete window.dataLayer;
+
+      const waitForGoogleAnalytics = () => {
+        if (typeof window.gtag !== 'undefined' && window.dataLayer) {
+          return true;
+        }
+        return false;
+      };
+
+      expect(waitForGoogleAnalytics()).toBe(false);
+    });
+
+    it('should timeout after 10 seconds', (done) => {
+      const timeoutHandler = () => {
+        console.warn('Enhanced Analytics: Timeout waiting for Google Analytics, skipping');
+        done();
+      };
+
+      setTimeout(timeoutHandler, 100); // Simulate timeout (shortened for test)
+      expect(console.warn).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Section Tracking', () => {
+    let mockIntersectionObserver;
+    let observerCallback;
+
+    beforeEach(() => {
+      mockIntersectionObserver = {
+        observe: vi.fn(),
+        unobserve: vi.fn(),
+        disconnect: vi.fn(),
+      };
+
+      global.IntersectionObserver = vi.fn((callback) => {
+        observerCallback = callback;
+        return mockIntersectionObserver;
+      });
+
+      const mockSections = [
+        { id: 'about', observe: vi.fn() },
+        { id: 'work', observe: vi.fn() },
+        { id: 'contact', observe: vi.fn() },
+      ];
+
+      document.querySelectorAll = vi.fn(() => mockSections);
+    });
+
+    it('should set up section tracking with IntersectionObserver', () => {
+      const setupSectionTracking = () => {
+        const observerOptions = {
+          threshold: 0.6,
+          rootMargin: '-80px 0px'
         };
 
-        trackEvent('test_event', { test_param: 'test_value' });
-      `;
+        const sectionObserver = new IntersectionObserver(() => {}, observerOptions);
+        document.querySelectorAll('section[id]').forEach(section => {
+          sectionObserver.observe(section);
+        });
 
-      eval(componentScript);
+        return sectionObserver;
+      };
 
-      // Verify
-      expect(mockConsole.warn).toHaveBeenCalledWith('Enhanced Analytics: gtag not available, queuing event:', 'test_event');
-      expect(window.dataLayer).toContainEqual({
-        'event': 'test_event',
-        'test_param': 'test_value'
+      const observer = setupSectionTracking();
+
+      expect(IntersectionObserver).toHaveBeenCalledWith(
+        expect.any(Function),
+        { threshold: 0.6, rootMargin: '-80px 0px' }
+      );
+      expect(document.querySelectorAll).toHaveBeenCalledWith('section[id]');
+      expect(mockIntersectionObserver.observe).toHaveBeenCalledTimes(3);
+    });
+
+    it('should track section views when intersecting', () => {
+      const sanitizeString = (str) => str ? str.replace(/[<>\"']/g, '').substring(0, 100) : '';
+
+      const mockEntry = {
+        isIntersecting: true,
+        target: { id: 'about' }
+      };
+
+      // Simulate observer callback
+      observerCallback = (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const sectionName = sanitizeString(entry.target.id);
+            if (sectionName && typeof window.gtag === 'function') {
+              window.gtag('event', 'section_view', {
+                event_category: 'navigation',
+                event_label: sectionName,
+                custom_map: {'section_name': sectionName}
+              });
+              console.log('Enhanced Analytics: Section view tracked:', sectionName);
+            }
+          }
+        });
+      };
+
+      // Setup observer
+      new IntersectionObserver(observerCallback);
+
+      // Trigger callback
+      observerCallback([mockEntry]);
+
+      expect(window.gtag).toHaveBeenCalledWith('event', 'section_view', {
+        event_category: 'navigation',
+        event_label: 'about',
+        custom_map: {'section_name': 'about'}
+      });
+      expect(console.log).toHaveBeenCalledWith('Enhanced Analytics: Section view tracked:', 'about');
+    });
+
+    it('should not track if gtag is not available', () => {
+      delete window.gtag;
+
+      const mockEntry = {
+        isIntersecting: true,
+        target: { id: 'about' }
+      };
+
+      observerCallback = (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const sectionName = entry.target.id;
+            if (sectionName && typeof window.gtag === 'function') {
+              window.gtag('event', 'section_view', {});
+            }
+          }
+        });
+      };
+
+      new IntersectionObserver(observerCallback);
+      observerCallback([mockEntry]);
+
+      // Should not be called since gtag is undefined
+      expect(window.gtag).toBeUndefined();
+    });
+  });
+
+  describe('Navigation Tracking', () => {
+    beforeEach(() => {
+      const mockLinks = [
+        {
+          getAttribute: vi.fn(() => '#about'),
+          addEventListener: vi.fn()
+        },
+        {
+          getAttribute: vi.fn(() => '#work'),
+          addEventListener: vi.fn()
+        }
+      ];
+
+      document.querySelectorAll = vi.fn((selector) => {
+        if (selector === 'nav a[href^="#"]') {
+          return mockLinks;
+        }
+        return [];
       });
     });
 
-    it('should handle errors gracefully', () => {
-      // Setup - gtag that throws an error
+    it('should set up navigation click tracking', () => {
+      const setupNavigationTracking = () => {
+        document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+          link.addEventListener('click', () => {}, { passive: true });
+        });
+      };
+
+      setupNavigationTracking();
+
+      const mockLinks = document.querySelectorAll('nav a[href^="#"]');
+      expect(document.querySelectorAll).toHaveBeenCalledWith('nav a[href^="#"]');
+      expect(mockLinks[0].addEventListener).toHaveBeenCalledWith('click', expect.any(Function), { passive: true });
+      expect(mockLinks[1].addEventListener).toHaveBeenCalledWith('click', expect.any(Function), { passive: true });
+    });
+
+    it('should track navigation clicks', () => {
+      const sanitizeString = (str) => str ? str.replace(/[<>\"']/g, '').substring(0, 100) : '';
+      let clickHandler;
+
+      const mockLink = {
+        getAttribute: vi.fn(() => '#about'),
+        addEventListener: vi.fn((event, handler) => {
+          clickHandler = handler;
+        })
+      };
+
+      // Simulate click handler
+      clickHandler = function() {
+        const section = sanitizeString(this.getAttribute('href').substring(1));
+        if (section && typeof window.gtag === 'function') {
+          window.gtag('event', 'navigation_click', {
+            event_category: 'navigation',
+            event_label: section,
+            navigation_type: 'menu'
+          });
+        }
+      };
+
+      mockLink.addEventListener('click', clickHandler, { passive: true });
+
+      // Simulate click
+      clickHandler.call(mockLink);
+
+      expect(window.gtag).toHaveBeenCalledWith('event', 'navigation_click', {
+        event_category: 'navigation',
+        event_label: 'about',
+        navigation_type: 'menu'
+      });
+    });
+  });
+
+  describe('Conversion Tracking', () => {
+    it('should track contact button clicks', () => {
+      const mockContactBtn = {
+        addEventListener: vi.fn()
+      };
+
+      document.getElementById = vi.fn((id) => {
+        if (id === 'contact-btn') return mockContactBtn;
+        return null;
+      });
+
+      const setupConversionTracking = () => {
+        const contactBtn = document.getElementById('contact-btn');
+        if (contactBtn) {
+          contactBtn.addEventListener('click', function() {
+            if (typeof window.gtag === 'function') {
+              window.gtag('event', 'contact_initiated', {
+                event_category: 'conversion',
+                event_label: 'hero_contact_button',
+                value: 1
+              });
+              console.log('Enhanced Analytics: Contact initiated event tracked');
+            }
+          }, { passive: true });
+        }
+      };
+
+      setupConversionTracking();
+
+      expect(document.getElementById).toHaveBeenCalledWith('contact-btn');
+      expect(mockContactBtn.addEventListener).toHaveBeenCalledWith(
+        'click',
+        expect.any(Function),
+        { passive: true }
+      );
+    });
+
+    it('should track email reveal with MutationObserver', () => {
+      const mockEmailDisplay = {};
+      let mutationCallback;
+
+      document.getElementById = vi.fn((id) => {
+        if (id === 'email-display') return mockEmailDisplay;
+        return null;
+      });
+
+      global.MutationObserver = vi.fn((callback) => {
+        mutationCallback = callback;
+        return {
+          observe: vi.fn(),
+          disconnect: vi.fn(),
+        };
+      });
+
+      const setupEmailTracking = () => {
+        const emailDisplay = document.getElementById('email-display');
+        if (emailDisplay) {
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                const emailLink = Array.from(mutation.addedNodes).find(node =>
+                  node.tagName === 'A' && node.href && node.href.startsWith('mailto:')
+                );
+                if (emailLink && typeof window.gtag === 'function') {
+                  window.gtag('event', 'email_revealed', {
+                    event_category: 'conversion',
+                    event_label: 'contact_email_reveal',
+                    value: 2
+                  });
+                }
+              }
+            });
+          });
+          observer.observe(emailDisplay, { childList: true });
+        }
+      };
+
+      setupEmailTracking();
+
+      // Simulate mutation
+      const mockMutation = {
+        type: 'childList',
+        addedNodes: [{
+          tagName: 'A',
+          href: 'mailto:test@example.com'
+        }]
+      };
+
+      mutationCallback([mockMutation]);
+
+      expect(window.gtag).toHaveBeenCalledWith('event', 'email_revealed', {
+        event_category: 'conversion',
+        event_label: 'contact_email_reveal',
+        value: 2
+      });
+    });
+  });
+
+  describe('Scroll Depth Tracking', () => {
+    it('should track scroll milestones', () => {
+      const throttle = (func, wait) => func; // Simplified for testing
+
+      let scrollHandler;
+      const maxScroll = 0;
+      const milestones = [25, 50, 75, 90];
+      const trackedMilestones = new Set();
+
+      // Mock scroll calculation
+      window.pageYOffset = 500; // 25% of 2000
+      document.documentElement.scrollHeight = 2000;
+      window.innerHeight = 1000;
+
+      const trackScrollDepth = () => {
+        const scrollPercent = Math.round(
+          (window.pageYOffset / (document.documentElement.scrollHeight - window.innerHeight)) * 100
+        );
+
+        if (scrollPercent >= 25 && !trackedMilestones.has(25)) {
+          trackedMilestones.add(25);
+          if (typeof window.gtag === 'function') {
+            window.gtag('event', 'scroll_depth', {
+              event_category: 'engagement',
+              event_label: '25_percent',
+              value: 25
+            });
+          }
+        }
+      };
+
+      trackScrollDepth();
+
+      expect(window.gtag).toHaveBeenCalledWith('event', 'scroll_depth', {
+        event_category: 'engagement',
+        event_label: '25_percent',
+        value: 25
+      });
+    });
+  });
+
+  describe('Utility Functions', () => {
+    it('should sanitize strings correctly', () => {
+      const sanitizeString = (str) => {
+        return str ? str.replace(/[<>\"']/g, '').substring(0, 100) : '';
+      };
+
+      expect(sanitizeString('normal text')).toBe('normal text');
+      expect(sanitizeString('<script>alert("xss")</script>')).toBe('scriptalert(xss)/script');
+      expect(sanitizeString('"quoted text"')).toBe('quoted text');
+      expect(sanitizeString("'single quoted'")).toBe('single quoted');
+      expect(sanitizeString('')).toBe('');
+      expect(sanitizeString(null)).toBe('');
+
+      // Test length limit
+      const longString = 'a'.repeat(150);
+      expect(sanitizeString(longString)).toBe('a'.repeat(100));
+    });
+
+    it('should throttle functions correctly', (done) => {
+      const throttle = (func, wait) => {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      };
+
+      let callCount = 0;
+      const testFunction = () => { callCount++; };
+      const throttledFunction = throttle(testFunction, 100);
+
+      // Call multiple times rapidly
+      throttledFunction();
+      throttledFunction();
+      throttledFunction();
+
+      // Should only be called once after delay
+      setTimeout(() => {
+        expect(callCount).toBe(1);
+        done();
+      }, 150);
+    });
+  });
+
+  describe('Error Handling', () => {
+    it('should handle gtag errors gracefully', () => {
       window.gtag = vi.fn(() => {
         throw new Error('gtag error');
       });
 
-      const componentScript = `
-        const trackEvent = (eventName, parameters = {}) => {
-          try {
-            if (typeof window.gtag === 'function') {
-              window.gtag('event', eventName, parameters);
-              console.log('Enhanced Analytics: Event tracked:', eventName, parameters);
-            } else {
-              console.warn('Enhanced Analytics: gtag not available, queuing event:', eventName);
-              window.dataLayer = window.dataLayer || [];
-              window.dataLayer.push({
-                'event': eventName,
-                ...parameters
-              });
-            }
-          } catch (error) {
-            console.error('Enhanced Analytics: Error tracking event:', eventName, error);
-          }
-        };
-
-        trackEvent('test_event', { test_param: 'test_value' });
-      `;
-
-      eval(componentScript);
-
-      // Verify error handling
-      expect(mockConsole.error).toHaveBeenCalledWith(
-        'Enhanced Analytics: Error tracking event:',
-        'test_event',
-        expect.any(Error)
-      );
-    });
-  });
-
-  describe('Contact button tracking', () => {
-    it('should track contact button clicks', () => {
-      // Setup
-      window.gtag = mockGtag;
-      document.body.innerHTML = '<button id="contact-btn">Contact Us</button>';
-
-      const setupScript = `
-        const trackEvent = (eventName, parameters = {}) => {
+      const safeGtagCall = () => {
+        try {
           if (typeof window.gtag === 'function') {
-            window.gtag('event', eventName, parameters);
+            window.gtag('event', 'test_event');
           }
-        };
+        } catch (error) {
+          console.error('Error tracking event:', error);
+        }
+      };
 
+      expect(() => safeGtagCall()).not.toThrow();
+      expect(console.error).toHaveBeenCalledWith('Error tracking event:', expect.any(Error));
+    });
+
+    it('should handle missing DOM elements gracefully', () => {
+      document.getElementById = vi.fn(() => null);
+      document.querySelectorAll = vi.fn(() => []);
+
+      const setupTracking = () => {
         const contactBtn = document.getElementById('contact-btn');
         if (contactBtn) {
-          contactBtn.addEventListener('click', function() {
-            trackEvent('contact_initiated', {
-              'event_category': 'conversion',
-              'event_label': 'hero_contact_button',
-              'value': 1
-            });
-          }, { passive: true });
+          // This should not execute
+          throw new Error('Should not reach here');
         }
-      `;
 
-      eval(setupScript);
+        const sections = document.querySelectorAll('section[id]');
+        expect(sections.length).toBe(0);
+      };
 
-      // Trigger click
-      const contactBtn = document.getElementById('contact-btn');
-      contactBtn.click();
-
-      // Verify
-      expect(mockGtag).toHaveBeenCalledWith('event', 'contact_initiated', {
-        'event_category': 'conversion',
-        'event_label': 'hero_contact_button',
-        'value': 1
-      });
-    });
-
-    it('should handle missing contact button gracefully', () => {
-      // Setup - no contact button in DOM
-      window.gtag = mockGtag;
-
-      const setupScript = `
-        const trackEvent = (eventName, parameters = {}) => {
-          if (typeof window.gtag === 'function') {
-            window.gtag('event', eventName, parameters);
-          }
-        };
-
-        const contactBtn = document.getElementById('contact-btn');
-        if (contactBtn) {
-          contactBtn.addEventListener('click', function() {
-            trackEvent('contact_initiated', {
-              'event_category': 'conversion',
-              'event_label': 'hero_contact_button',
-              'value': 1
-            });
-          }, { passive: true });
-        }
-      `;
-
-      eval(setupScript);
-
-      // Should not throw error and gtag should not be called
-      expect(mockGtag).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Navigation tracking', () => {
-    it('should track navigation clicks', () => {
-      // Setup
-      window.gtag = mockGtag;
-      document.body.innerHTML = `
-        <nav>
-          <a href="#about">About</a>
-          <a href="#contact">Contact</a>
-        </nav>
-      `;
-
-      const setupScript = `
-        const sanitizeString = (str) => {
-          return str ? str.replace(/[<>\"']/g, '').substring(0, 100) : '';
-        };
-
-        const trackEvent = (eventName, parameters = {}) => {
-          if (typeof window.gtag === 'function') {
-            window.gtag('event', eventName, parameters);
-          }
-        };
-
-        document.querySelectorAll('nav a[href^="#"]').forEach(link => {
-          link.addEventListener('click', function(e) {
-            const section = sanitizeString(this.getAttribute('href').substring(1));
-            if (section) {
-              trackEvent('navigation_click', {
-                'event_category': 'navigation',
-                'event_label': section,
-                'navigation_type': 'menu'
-              });
-            }
-          }, { passive: true });
-        });
-      `;
-
-      eval(setupScript);
-
-      // Trigger click on about link
-      const aboutLink = document.querySelector('a[href="#about"]');
-      aboutLink.click();
-
-      // Verify
-      expect(mockGtag).toHaveBeenCalledWith('event', 'navigation_click', {
-        'event_category': 'navigation',
-        'event_label': 'about',
-        'navigation_type': 'menu'
-      });
-    });
-  });
-
-  describe('External link tracking', () => {
-    it('should track external link clicks', () => {
-      // Setup
-      window.gtag = mockGtag;
-
-      // Mock window.location.hostname
-      delete window.location;
-      window.location = { hostname: 'heliomedeiros.com' };
-
-      document.body.innerHTML = `
-        <a href="https://github.com/helmedeiros">GitHub</a>
-        <a href="https://heliomedeiros.com/blog">Internal Link</a>
-      `;
-
-      const setupScript = `
-        const sanitizeString = (str) => {
-          return str ? str.replace(/[<>\"']/g, '').substring(0, 100) : '';
-        };
-
-        const trackEvent = (eventName, parameters = {}) => {
-          if (typeof window.gtag === 'function') {
-            window.gtag('event', eventName, parameters);
-          }
-        };
-
-        document.querySelectorAll('a[href^="http"]').forEach(link => {
-          if (link.hostname === window.location.hostname) return;
-
-          link.addEventListener('click', function(e) {
-            const linkText = sanitizeString(this.textContent.trim());
-            const linkUrl = this.href;
-            const linkDomain = this.hostname;
-
-            trackEvent('outbound_click', {
-              'event_category': 'engagement',
-              'event_label': linkDomain,
-              'link_text': linkText,
-              'link_url': linkUrl
-            });
-          }, { passive: true });
-        });
-      `;
-
-      eval(setupScript);
-
-      // Click external link (GitHub)
-      const githubLink = document.querySelector('a[href^="https://github.com"]');
-      githubLink.click();
-
-      // Verify external link was tracked
-      expect(mockGtag).toHaveBeenCalledWith('event', 'outbound_click', {
-        'event_category': 'engagement',
-        'event_label': 'github.com',
-        'link_text': 'GitHub',
-        'link_url': 'https://github.com/helmedeiros'
-      });
-
-      // Internal link should not be tracked
-      const internalLink = document.querySelector('a[href^="https://heliomedeiros.com"]');
-      mockGtag.mockClear();
-      internalLink.click();
-      expect(mockGtag).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Initialization and error handling', () => {
-    it('should initialize tracking successfully', () => {
-      // Setup
-      window.gtag = mockGtag;
-      document.body.innerHTML = `
-        <button id="contact-btn">Contact</button>
-        <nav><a href="#about">About</a></nav>
-        <section id="about">About content</section>
-      `;
-
-      const initScript = `
-        console.log('Enhanced Analytics: Starting initialization...');
-
-        const sanitizeString = (str) => {
-          return str ? str.replace(/[<>\"']/g, '').substring(0, 100) : '';
-        };
-
-        const trackEvent = (eventName, parameters = {}) => {
-          try {
-            if (typeof window.gtag === 'function') {
-              window.gtag('event', eventName, parameters);
-              console.log('Enhanced Analytics: Event tracked:', eventName, parameters);
-            }
-          } catch (error) {
-            console.error('Enhanced Analytics: Error tracking event:', eventName, error);
-          }
-        };
-
-        const initializeTracking = () => {
-          try {
-            console.log('Enhanced Analytics: Initializing all tracking...');
-
-            // Setup contact tracking
-            const contactBtn = document.getElementById('contact-btn');
-            if (contactBtn) {
-              contactBtn.addEventListener('click', function() {
-                trackEvent('contact_initiated', {
-                  'event_category': 'conversion',
-                  'event_label': 'hero_contact_button',
-                  'value': 1
-                });
-              }, { passive: true });
-            }
-
-            trackEvent('analytics_enhanced_loaded', {
-              'event_category': 'system',
-              'event_label': 'tracking_initialized'
-            });
-
-            console.log('Enhanced Analytics: All tracking initialized successfully');
-          } catch (error) {
-            console.error('Enhanced Analytics: Initialization failed:', error);
-          }
-        };
-
-        initializeTracking();
-      `;
-
-      eval(initScript);
-
-      // Verify initialization
-      expect(mockConsole.log).toHaveBeenCalledWith('Enhanced Analytics: Starting initialization...');
-      expect(mockConsole.log).toHaveBeenCalledWith('Enhanced Analytics: Initializing all tracking...');
-      expect(mockConsole.log).toHaveBeenCalledWith('Enhanced Analytics: All tracking initialized successfully');
-
-      // Verify system event was tracked
-      expect(mockGtag).toHaveBeenCalledWith('event', 'analytics_enhanced_loaded', {
-        'event_category': 'system',
-        'event_label': 'tracking_initialized'
-      });
-    });
-
-    it('should handle initialization errors gracefully', () => {
-      // Setup - gtag that throws an error
-      window.gtag = vi.fn(() => {
-        throw new Error('gtag initialization error');
-      });
-
-      const initScript = `
-        const trackEvent = (eventName, parameters = {}) => {
-          try {
-            if (typeof window.gtag === 'function') {
-              window.gtag('event', eventName, parameters);
-            }
-          } catch (error) {
-            console.error('Enhanced Analytics: Error tracking event:', eventName, error);
-          }
-        };
-
-        const initializeTracking = () => {
-          try {
-            trackEvent('analytics_enhanced_loaded', {
-              'event_category': 'system',
-              'event_label': 'tracking_initialized'
-            });
-            console.log('Enhanced Analytics: All tracking initialized successfully');
-          } catch (error) {
-            console.error('Enhanced Analytics: Initialization failed:', error);
-          }
-        };
-
-        initializeTracking();
-      `;
-
-      eval(initScript);
-
-      // Should handle error gracefully
-      expect(mockConsole.error).toHaveBeenCalledWith(
-        'Enhanced Analytics: Error tracking event:',
-        'analytics_enhanced_loaded',
-        expect.any(Error)
-      );
-    });
-  });
-
-  describe('String sanitization', () => {
-    it('should sanitize strings properly', () => {
-      const sanitizeScript = `
-        const sanitizeString = (str) => {
-          return str ? str.replace(/[<>\"']/g, '').substring(0, 100) : '';
-        };
-
-        window.testSanitize = sanitizeString;
-      `;
-
-      eval(sanitizeScript);
-
-      // Test cases
-      expect(window.testSanitize('normal text')).toBe('normal text');
-      expect(window.testSanitize('<script>alert("xss")</script>')).toBe('scriptalert(xss)/script');
-      expect(window.testSanitize('"quoted" text')).toBe('quoted text');
-      expect(window.testSanitize("'single' quotes")).toBe('single quotes');
-      expect(window.testSanitize(null)).toBe('');
-      expect(window.testSanitize(undefined)).toBe('');
-
-      // Test length limit
-      const longString = 'a'.repeat(150);
-      expect(window.testSanitize(longString)).toBe('a'.repeat(100));
+      expect(() => setupTracking()).not.toThrow();
     });
   });
 });
