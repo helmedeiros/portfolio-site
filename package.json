@@ -10,7 +10,9 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "pre-push": "npm run test:run && npm run build",
+    "ci-check": "npm run test:run && npm run build && npm run preview -- --host 127.0.0.1 --port 4321"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.7",

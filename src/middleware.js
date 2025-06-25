@@ -1,8 +1,8 @@
 // Security middleware to add proper HTTP headers
-export function onRequest(context, next) {
+export async function onRequest(context, next) {
   // Only apply headers in production
   if (import.meta.env.PROD) {
-    const response = next();
+    const response = await next();
 
     // Add security headers
     response.headers.set('X-Frame-Options', 'DENY');
