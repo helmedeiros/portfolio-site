@@ -164,6 +164,61 @@ While this is a personal portfolio, contributions for bug fixes or improvements 
 
 This project is open source and available under the MIT License.
 
+## 🛠️ Development Setup
+
+### Local Development
+
+1. **Install Dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+2. **Start Development Server**:
+
+   ```bash
+   npm run dev
+   ```
+
+3. **Run Tests**:
+   ```bash
+   npm test              # Watch mode
+   npm run test:run      # Single run
+   npm run test:coverage # With coverage
+   ```
+
+### Pre-Push Quality Checks
+
+To prevent CI failures, always run these commands before pushing:
+
+```bash
+# Quick check (recommended before every push)
+npm run pre-push
+
+# Comprehensive check (includes preview)
+npm run ci-check
+```
+
+### Git Hooks Setup (Optional but Recommended)
+
+Install the pre-push hook to automatically run checks:
+
+```bash
+# Make the script executable (already done if you cloned recently)
+chmod +x pre-push.sh
+
+# Set up the Git hook
+cp pre-push.sh .git/hooks/pre-push
+
+# Now Git will automatically run tests and build before every push
+```
+
+This prevents:
+
+- ❌ Broken builds from reaching CI
+- ❌ Test failures in production
+- ❌ Runtime errors in deployed code
+
 ---
 
 **Live at:** [heliomedeiros.com](https://heliomedeiros.com) 🚀
