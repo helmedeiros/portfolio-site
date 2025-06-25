@@ -1,14 +1,11 @@
 ---
-// Google Analytics 4 Component - Simplified and reliable approach
+// Google Analytics 4 Component - Production ready
 ---
 
 {import.meta.env.PROD && (
   <script is:inline>
-    // Simplified GA4 implementation for better reliability
-    console.log('GoogleAnalytics component loaded, isProd check:', true);
-
+    // Google Analytics 4 implementation
     const measurementId = 'G-GL0Q1PNV4W';
-    console.log('GoogleAnalytics: Production mode confirmed, loading GA scripts...');
 
     // Initialize dataLayer before loading GA script
     window.dataLayer = window.dataLayer || [];
@@ -29,17 +26,6 @@
     gaScript.async = true;
     gaScript.src = `https://www.googletagmanager.com/gtag/js?id=${measurementId}`;
     document.head.appendChild(gaScript);
-
-    gaScript.onload = function() {
-      console.log('GA script loaded successfully');
-      console.log('gtag function available:', typeof window.gtag === 'function');
-
-      // Send a test event to confirm everything is working
-      gtag('event', 'ga_loaded', {
-        event_category: 'system',
-        event_label: 'analytics_ready'
-      });
-    };
 
     gaScript.onerror = function() {
       console.error('Failed to load Google Analytics script');
