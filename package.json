@@ -22,7 +22,7 @@
   "devDependencies": {
     "@vitest/ui": "^3.2.4",
     "happy-dom": "^18.0.1",
-    "jsdom": "^26.1.0",
+    "jsdom": "^27.0.0",
     "vitest": "^3.2.4"
   }
 }
