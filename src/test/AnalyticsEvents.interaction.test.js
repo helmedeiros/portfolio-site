@@ -288,7 +288,7 @@ describe('AnalyticsEvents User Interaction Errors', () => {
       };
 
       // Mock IntersectionObserver
-      global.IntersectionObserver = vi.fn((callback) => {
+      global.IntersectionObserver = vi.fn(function (callback) {
         observerCallback = callback;
         return {
           observe: vi.fn(),
