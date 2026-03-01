@@ -11,7 +11,7 @@ import Layout from '../layouts/Layout.astro';
         <ul class="hidden md:flex space-x-8">
           <li><a href="#about" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">About</a></li>
           <li><a href="#work" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">Work</a></li>
-          <li><a href="#posts" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">Posts</a></li>
+          <li><a href="#posts" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">Writing</a></li>
           <li><a href="#contact" class="text-gray-600 hover:text-gray-900 transition-colors font-medium">Contact</a></li>
         </ul>
       </div>
@@ -25,26 +25,27 @@ import Layout from '../layouts/Layout.astro';
         <div class="space-y-8">
           <!-- Status Badge -->
           <div class="inline-flex items-center gap-2 bg-blue-50 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">
-            <span class="w-2 h-2 bg-blue-500 rounded-full status-dot"></span>
-            Building at Omio
+            <span class="w-2 h-2 bg-green-500 rounded-full status-dot"></span>
+            Based in Berlin. Building at Omio.
           </div>
 
           <!-- Main Headline -->
           <div>
-            <h1 class="text-6xl lg:text-8xl font-black text-gray-900 leading-none tracking-tight mb-4">
-              Hello, I'm<br/>
+            <h1 class="text-5xl lg:text-7xl font-black text-gray-900 leading-none tracking-tight mb-4">
               <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-                Helio Medeiros.
+                Helio Medeiros
               </span>
             </h1>
-
-            <div class="text-2xl lg:text-3xl font-light text-gray-600 mb-6 space-y-1">
-              <div class="font-bold tracking-wide">ENGINEERING</div>
-              <div class="font-bold tracking-wide">MANAGER</div>
+            <div class="text-xl lg:text-2xl font-bold tracking-wide text-gray-600 mb-8 space-y-1">
+              <p>AI-Native Engineering Leader</p>
+              <p>Monetization Systems Architect</p>
             </div>
 
             <p class="text-lg text-gray-600 leading-relaxed max-w-lg">
-              I help teams build scalable systems, ship faster, and grow with confidence. Remote-first by design. Product-minded by default.
+              Designing revenue-critical pricing systems built for rapid experimentation and measurable economic impact.
+            </p>
+            <p class="text-base text-gray-500 leading-relaxed max-w-lg mt-3">
+              Operating at eight-figure annual booking scale.
             </p>
           </div>
 
@@ -52,6 +53,18 @@ import Layout from '../layouts/Layout.astro';
           <a href="#contact" class="inline-block bg-gray-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-gray-800 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg">
             Get in touch
           </a>
+
+          <!-- Proof Bar -->
+          <div class="border-t border-gray-200 pt-6 mt-2">
+            <p class="text-xs font-semibold tracking-widest text-gray-400 uppercase mb-3">Selected Impact</p>
+            <div class="flex flex-wrap gap-6 text-sm font-medium text-gray-500">
+              <span><strong class="text-gray-900">21</strong> production experiments in 4 sprints</span>
+              <span class="text-gray-300">&middot;</span>
+              <span><strong class="text-gray-900">2.4%</strong> early-funnel conversion lift</span>
+              <span class="text-gray-300">&middot;</span>
+              <span><strong class="text-gray-900">Multi-million</strong> annual revenue impact</span>
+            </div>
+          </div>
         </div>
 
         <!-- Hero Image -->
@@ -72,71 +85,49 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
-  <!-- About Section -->
+  <!-- Philosophy Section -->
   <section id="about" class="py-20 bg-white">
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid lg:grid-cols-3 gap-12">
         <div>
-          <h2 class="text-5xl font-black text-gray-900 leading-tight">About</h2>
+          <h2 class="text-5xl font-black text-gray-900 leading-tight">How I Think</h2>
         </div>
 
         <div class="lg:col-span-2 space-y-8">
           <div class="space-y-6 text-lg text-gray-600 leading-relaxed">
-            <p>
-              With 20+ years in tech and over a decade leading engineering teams, I've built resilient, remote-first cultures across fintech and travel tech. From hands-on coding to scaling distributed systems, I focus on empowering people and aligning engineering excellence with product outcomes.
+            <p class="text-xl font-semibold text-gray-900">
+              I design systems that learn.
             </p>
 
             <p>
-              Currently based in Berlin, I lead teams that own high-impact platforms end-to-end—from ideation to delivery—working deeply with design, product, and data to continuously improve customer experience. I thrive on asynchronous collaboration, clear ownership, and mentoring engineers into impactful, product-minded leaders.
+              Modern engineering leadership operates simultaneously at three levels:
             </p>
+            <div class="space-y-2 text-base text-gray-700 font-medium">
+              <p><strong>Strategy</strong> — Where does value come from?</p>
+              <p><strong>Architecture</strong> — How does the system enable it?</p>
+              <p><strong>Execution</strong> — How fast can we learn?</p>
+            </div>
 
-            <p>
-              A long-time Agile, Git, TDD advocate since 2008, I've spoken at meetups, driven adoption of continuous integration, transparency, and customer value across organizations, and remain passionate about building tools that help developers do their best work.
+            <div class="space-y-1">
+              <p class="font-medium text-gray-900">Revenue systems are feedback loops.</p>
+              <p class="font-medium text-gray-900">AI is leverage embedded into those loops.</p>
+            </div>
+
+            <p class="text-base text-gray-500">
+              Former ThoughtWorker. Builder at heart.
             </p>
           </div>
 
-          <!-- Skills Grid -->
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-              Leadership
-            </div>
-            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-              System Design
-            </div>
-            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-              Remote-first
-            </div>
-            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-              Team Building
-            </div>
-            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-              Fintech
-            </div>
-            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-              Developer Experience
-            </div>
-            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-              Git
-            </div>
-            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-              Mentorship
-            </div>
-            <div class="bg-gray-50 p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-              Product Engineering
-            </div>
-          </div>
-
-          <!-- Location & Languages -->
-          <div class="grid md:grid-cols-2 gap-6">
-            <div class="bg-blue-50 p-6 rounded-xl">
-              <h3 class="font-bold text-gray-900 mb-2">📍 Based in Berlin, Germany</h3>
-              <p class="text-gray-600">Available for remote collaboration worldwide</p>
-            </div>
-
-            <div class="bg-green-50 p-6 rounded-xl">
-              <h3 class="font-bold text-gray-900 mb-2">🌍 Languages</h3>
-              <p class="text-gray-600">English, Portuguese, German</p>
-            </div>
+          <!-- Skills -->
+          <div class="flex flex-wrap gap-3">
+            <span class="bg-gray-50 px-4 py-2 rounded-full text-sm font-medium text-gray-700">Revenue Architecture</span>
+            <span class="bg-gray-50 px-4 py-2 rounded-full text-sm font-medium text-gray-700">Experimentation Systems</span>
+            <span class="bg-gray-50 px-4 py-2 rounded-full text-sm font-medium text-gray-700">AI-Assisted Development</span>
+            <span class="bg-gray-50 px-4 py-2 rounded-full text-sm font-medium text-gray-700">Distributed Systems</span>
+            <span class="bg-gray-50 px-4 py-2 rounded-full text-sm font-medium text-gray-700">Pricing Infrastructure</span>
+            <span class="bg-gray-50 px-4 py-2 rounded-full text-sm font-medium text-gray-700">Behavioral Economics</span>
+            <span class="bg-gray-50 px-4 py-2 rounded-full text-sm font-medium text-gray-700">Observability</span>
+            <span class="bg-gray-50 px-4 py-2 rounded-full text-sm font-medium text-gray-700">Event-Driven Systems</span>
           </div>
         </div>
       </div>
@@ -146,62 +137,66 @@ import Layout from '../layouts/Layout.astro';
   <!-- Work Section -->
   <section id="work" class="py-20 bg-gray-50">
     <div class="max-w-6xl mx-auto px-6">
-      <h2 class="text-5xl font-black text-gray-900 mb-16 text-center">Recent work</h2>
+      <h2 class="text-5xl font-black text-gray-900 mb-16 text-center">Systems I've Built</h2>
 
       <!-- Work Grid -->
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Omio -->
+        <!-- Monetization & Conversion -->
         <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group">
           <div class="h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-            <span class="text-white text-5xl">🚄</span>
+            <span class="text-white text-5xl font-black tracking-tight">$</span>
           </div>
           <div class="p-6">
-            <div class="text-sm text-blue-600 font-semibold mb-2">CURRENT</div>
-            <h3 class="text-xl font-bold text-gray-900 mb-3">Omio</h3>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Monetization &amp; Conversion Infrastructure</h3>
             <p class="text-gray-600 mb-4 leading-relaxed">
-              Six years of building travel technology that connects millions of travelers
-              across Europe. From scaling platforms to cultivating teams, it's been an
-              incredible journey of growth and learning.
+              Architected pricing and experimentation platforms that compress hypothesis &rarr; deploy &rarr; measure &rarr; decide cycles.
             </p>
-            <div class="flex flex-wrap gap-2">
-              <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">Engineering Management</span>
-              <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">Travel Tech</span>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Built high-velocity infrastructure supporting experimentation at scale within an eight-figure booking domain.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">Pricing Systems</span>
+              <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">Experimentation</span>
             </div>
           </div>
         </div>
 
-        <!-- Omio Flex -->
+        <!-- Insurance & Attach-Rate -->
         <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group">
           <div class="h-48 bg-gradient-to-br from-green-500 to-teal-600 flex items-center justify-center">
-            <span class="text-white text-5xl">🛡️</span>
+            <span class="text-white text-5xl font-black tracking-tight">&amp;</span>
           </div>
           <div class="p-6">
-            <h3 class="text-xl font-bold text-gray-900 mb-3">Omio Flex</h3>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">Insurance &amp; Attach-Rate Platform</h3>
             <p class="text-gray-600 mb-4 leading-relaxed">
-              Insurance product for flexible ticket cancellations, increasing customer confidence and reducing support load by 30%.
+              Scaled cancel-for-any-reason coverage across operators and currencies.
             </p>
-            <div class="flex flex-wrap gap-2">
-              <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">Product Design</span>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Integrated pricing logic, experimentation frameworks, and provider APIs to increase attach rate while maintaining regulatory and operational constraints.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-medium">Revenue Architecture</span>
               <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-xs font-medium">Insurance</span>
             </div>
           </div>
         </div>
 
-        <!-- AI & Learning -->
+        <!-- AI-Embedded Engineering -->
         <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-2 group">
           <div class="h-48 bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
-            <span class="text-white text-5xl">🤖</span>
+            <span class="text-white text-5xl font-black tracking-tight">&gt;_</span>
           </div>
           <div class="p-6">
-            <h3 class="text-xl font-bold text-gray-900 mb-3">AI Integration</h3>
+            <h3 class="text-xl font-bold text-gray-900 mb-3">AI-Embedded Engineering Workflows</h3>
             <p class="text-gray-600 mb-4 leading-relaxed">
-              Exploring how AI can enhance team productivity and innovation.
-              From workshops to practical implementations, helping teams embrace
-              the future of development.
+              Integrated AI directly into engineering practice — from architecture ideation and RFC drafting to experimentation design and code review augmentation.
             </p>
-            <div class="flex flex-wrap gap-2">
-              <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">AI</span>
-              <span class="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-xs font-medium">Team Development</span>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Increased developer leverage in revenue-critical environments.
+            </p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-medium">AI-Assisted Dev</span>
+              <span class="bg-pink-100 text-pink-800 px-3 py-1 rounded-full text-xs font-medium">Developer Leverage</span>
             </div>
           </div>
         </div>
@@ -209,14 +204,14 @@ import Layout from '../layouts/Layout.astro';
     </div>
   </section>
 
-  <!-- Posts & Talks Section -->
+  <!-- Writing & Speaking Section -->
   <section id="posts" class="py-20 bg-white">
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center mb-16">
-        <h2 class="text-5xl font-black text-gray-900 mb-6">Posts & Talks</h2>
+        <h2 class="text-5xl font-black text-gray-900 mb-6">Writing &amp; Speaking</h2>
         <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          Sharing knowledge through writing and speaking. From technical deep-dives to
-          team dynamics, exploring what I've learned along the way.
+          I write and speak about the mechanics behind high-leverage systems — where architecture,
+          experimentation, and AI intersect in production environments.
         </p>
       </div>
 
@@ -224,36 +219,17 @@ import Layout from '../layouts/Layout.astro';
       <div class="grid md:grid-cols-2 gap-12 mb-16">
         <!-- Writing -->
         <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8">
-          <div class="flex items-center mb-6">
-            <span class="text-4xl mr-4">✍️</span>
-            <div>
-              <h3 class="text-2xl font-bold text-gray-900">Technical Writing</h3>
-              <p class="text-gray-600">7+ years of blogging</p>
-            </div>
+          <div class="mb-6">
+            <h3 class="text-2xl font-bold text-gray-900">Technical Writing</h3>
           </div>
           <p class="text-gray-700 mb-6 leading-relaxed">
-            Technical articles covering software engineering, system design, and technology leadership.
-            A collection of insights and learnings from over a decade in tech.
+            Long-form essays exploring how pricing systems evolve, how experimentation shapes architecture, and how AI enhances engineering workflows.
           </p>
-          <div class="space-y-3">
-            <div class="flex items-center text-sm text-gray-600">
-              <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-              Software Engineering & Architecture
-            </div>
-            <div class="flex items-center text-sm text-gray-600">
-              <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-              Development Best Practices
-            </div>
-            <div class="flex items-center text-sm text-gray-600">
-              <span class="w-2 h-2 bg-blue-500 rounded-full mr-3"></span>
-              Technology Insights & Trends
-            </div>
-          </div>
           <a href="https://blog.heliomedeiros.com"
              target="_blank"
              rel="noopener noreferrer"
              class="inline-flex items-center mt-6 text-blue-600 hover:text-blue-800 font-semibold transition-colors">
-            View All Posts
+            View Writing
             <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
             </svg>
@@ -262,31 +238,12 @@ import Layout from '../layouts/Layout.astro';
 
         <!-- Speaking -->
         <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8">
-          <div class="flex items-center mb-6">
-            <span class="text-4xl mr-4">🎤</span>
-            <div>
-              <h3 class="text-2xl font-bold text-gray-900">Speaking & Presentations</h3>
-              <p class="text-gray-600">70+ technical talks & workshops</p>
-            </div>
+          <div class="mb-6">
+            <h3 class="text-2xl font-bold text-gray-900">Speaking &amp; Presentations</h3>
           </div>
           <p class="text-gray-700 mb-6 leading-relaxed">
-            Sharing knowledge through technical presentations, workshops, and team training sessions.
-            From agile practices to team building, helping others grow and learn.
+            70+ talks and workshops for engineering teams and communities on operating high-impact systems and increasing experimentation velocity.
           </p>
-          <div class="space-y-3">
-            <div class="flex items-center text-sm text-gray-600">
-              <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-              Team Building & Culture
-            </div>
-            <div class="flex items-center text-sm text-gray-600">
-              <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-              Agile & Development Practices
-            </div>
-            <div class="flex items-center text-sm text-gray-600">
-              <span class="w-2 h-2 bg-purple-500 rounded-full mr-3"></span>
-              Technical Architecture
-            </div>
-          </div>
           <div class="flex flex-col sm:flex-row gap-3 mt-6">
             <a href="https://speakerdeck.com/helmedeiros"
                target="_blank"
@@ -312,19 +269,19 @@ import Layout from '../layouts/Layout.astro';
 
       <!-- Recent Topics -->
       <div class="bg-gray-50 rounded-2xl p-8">
-        <h4 class="text-xl font-bold text-gray-900 mb-6">Recent Focus Areas</h4>
+        <h4 class="text-xl font-bold text-gray-900 mb-6">Current Focus</h4>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div class="bg-white p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-            Team Cultivation
+            AI-Native Engineering
           </div>
           <div class="bg-white p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-            AI Integration
+            Revenue Feedback Loops
           </div>
           <div class="bg-white p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-            Platform Scalability
+            Developer Leverage
           </div>
           <div class="bg-white p-4 rounded-xl text-center font-medium text-gray-700 hover:bg-gray-900 hover:text-white transition-all duration-300 cursor-default">
-            System Architecture
+            Experiment Velocity
           </div>
         </div>
       </div>
@@ -336,20 +293,20 @@ import Layout from '../layouts/Layout.astro';
     <div class="max-w-6xl mx-auto px-6">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
         <div>
-          <div class="text-4xl font-black mb-2">17+</div>
+          <div class="text-4xl font-black mb-2">22+</div>
           <div class="text-gray-400 font-medium">Years Engineering</div>
         </div>
         <div>
-          <div class="text-4xl font-black mb-2">3+</div>
-          <div class="text-gray-400 font-medium">Years Managing</div>
+          <div class="text-4xl font-black mb-2">21</div>
+          <div class="text-gray-400 font-medium">Experiments in 4 Sprints</div>
+        </div>
+        <div>
+          <div class="text-4xl font-black mb-2">$M+</div>
+          <div class="text-gray-400 font-medium">Revenue Impact</div>
         </div>
         <div>
           <div class="text-4xl font-black mb-2">70+</div>
-          <div class="text-gray-400 font-medium">Talks & Workshops</div>
-        </div>
-        <div>
-          <div class="text-4xl font-black mb-2">3</div>
-          <div class="text-gray-400 font-medium">Languages</div>
+          <div class="text-gray-400 font-medium">Talks &amp; Workshops</div>
         </div>
       </div>
     </div>
@@ -359,15 +316,14 @@ import Layout from '../layouts/Layout.astro';
   <section id="contact" class="py-20 bg-white">
     <div class="max-w-4xl mx-auto px-6 text-center">
       <h2 class="text-5xl font-black text-gray-900 mb-6 leading-tight">
-        Great things<br/>
-        can happen<br/>
-        with a simple<br/>
-        <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">"hello!"</span>
+        Let's Connect
       </h2>
 
-      <p class="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-        Interested in connecting? Feel free to reach out to discuss technology, team building, or just to say hello.
-      </p>
+      <div class="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed space-y-2">
+        <p>Building revenue systems?</p>
+        <p>Designing AI-native engineering workflows?</p>
+        <p class="font-medium text-gray-900 pt-2">Let's talk.</p>
+      </div>
 
       <button id="contact-btn" class="inline-block bg-gray-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-gray-800 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg text-lg mb-12">
         Contact me
@@ -378,10 +334,10 @@ import Layout from '../layouts/Layout.astro';
         <span id="email-display" class="hover:text-gray-900 transition-colors font-medium cursor-pointer">
           Click "Contact me" to reveal email
         </span>
-        <span class="hidden md:block">•</span>
+        <span class="hidden md:block">&middot;</span>
         <span class="font-medium">Berlin, Germany</span>
-        <span class="hidden md:block">•</span>
-        <span class="font-medium">Available for remote work</span>
+        <span class="hidden md:block">&middot;</span>
+        <span class="font-medium">Available for remote collaboration</span>
       </div>
     </div>
   </section>
