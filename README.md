@@ -2,9 +2,9 @@
 
 A modern, minimalist personal website built with Astro and featuring a responsive design with smooth animations and professional presentation.
 
-**🌐 Live Site:** [heliomedeiros.com](https://heliomedeiros.com)
+**Live Site:** [heliomedeiros.com](https://heliomedeiros.com)
 
-## 🎨 Design Features
+## Design Features
 
 - **Minimalist Design**: Clean, spacious layout with strategic use of white space
 - **Bold Typography**: Modern Inter font with varied weights for visual hierarchy
@@ -14,7 +14,7 @@ A modern, minimalist personal website built with Astro and featuring a responsiv
 - **Security-First**: Email obfuscation and comprehensive security headers
 - **Accessibility**: Built with accessibility best practices in mind
 
-## 🚀 Quick Start
+## Quick Start
 
 1. Install dependencies:
 
@@ -30,7 +30,7 @@ npm run dev
 
 3. Open [http://localhost:4321](http://localhost:4321) in your browser
 
-## 🚢 Deployment to GitHub Pages
+## Deployment to GitHub Pages
 
 This site is configured for automatic deployment to GitHub Pages with a custom domain.
 
@@ -79,7 +79,7 @@ npm run preview
    - SSL certificate is automatically provided by GitHub Pages
    - Deploy on every push to `main` branch
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
@@ -91,7 +91,7 @@ src/
     └── global.css           # Global styles with Tailwind and custom CSS
 ```
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - **Astro**: Static site generator optimized for performance
 - **TailwindCSS v4**: Utility-first CSS framework
@@ -102,7 +102,7 @@ src/
 - **GitHub Actions**: Automated CI/CD pipeline
 - **GitHub Pages**: Static site hosting with custom domain
 
-## 📱 Responsive Design
+## Responsive Design
 
 The website is fully responsive with breakpoints:
 
@@ -110,7 +110,7 @@ The website is fully responsive with breakpoints:
 - Tablet: 768px - 1199px
 - Mobile: < 768px
 
-## ⚡ Performance
+## Performance
 
 - Optimized CSS with efficient selectors
 - Smooth scroll behavior
@@ -119,7 +119,7 @@ The website is fully responsive with breakpoints:
 - SEO-friendly structure
 - Fast loading times with Astro's static generation
 
-## 🔒 Security Features
+## Security Features
 
 - Content Security Policy (CSP) headers
 - Email obfuscation to prevent spam
@@ -128,7 +128,7 @@ The website is fully responsive with breakpoints:
 - Automated dependency updates via Dependabot
 - See [SECURITY.md](SECURITY.md) for full details
 
-## 🔄 Automated Maintenance
+## Automated Maintenance
 
 ### Dependabot Configuration
 
@@ -151,7 +151,7 @@ This repository uses Dependabot for automatic dependency management:
 
 All updates are reviewed before merging to ensure compatibility.
 
-## 🤝 Contributing
+## Contributing
 
 While this is a personal portfolio, contributions for bug fixes or improvements are welcome:
 
@@ -160,11 +160,11 @@ While this is a personal portfolio, contributions for bug fixes or improvements 
 3. Make your changes
 4. Submit a pull request
 
-## 📄 License
+## License
 
 This project is open source and available under the MIT License.
 
-## 🛠️ Development Setup
+## Development Setup
 
 ### Local Development
 
@@ -215,11 +215,11 @@ cp pre-push.sh .git/hooks/pre-push
 
 This prevents:
 
-- ❌ Broken builds from reaching CI
-- ❌ Test failures in production
-- ❌ Runtime errors in deployed code
+- Broken builds from reaching CI
+- Test failures in production
+- Runtime errors in deployed code
 
 ---
 
-**Live at:** [heliomedeiros.com](https://heliomedeiros.com) 🚀
+**Live at:** [heliomedeiros.com](https://heliomedeiros.com)
 # Test change
