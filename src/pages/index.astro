@@ -325,9 +325,14 @@ import Layout from '../layouts/Layout.astro';
         <p class="font-medium text-gray-900 pt-2">Let's talk.</p>
       </div>
 
-      <button id="contact-btn" class="inline-block bg-gray-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-gray-800 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg text-lg mb-12">
-        Contact me
-      </button>
+      <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+        <button id="contact-btn" class="inline-block bg-gray-900 text-white px-8 py-4 rounded-full font-semibold hover:bg-gray-800 transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg text-lg">
+          Contact me
+        </button>
+        <button id="linkedin-btn" class="inline-block bg-[#0A66C2] text-white px-8 py-4 rounded-full font-semibold hover:bg-[#004182] transition-all duration-300 hover:transform hover:-translate-y-1 hover:shadow-lg text-lg">
+          Connect on LinkedIn
+        </button>
+      </div>
 
       <!-- Contact Info -->
       <div class="flex flex-col md:flex-row justify-center items-center gap-8 text-gray-600">
@@ -399,6 +404,13 @@ import Layout from '../layouts/Layout.astro';
 
       // Optional: Auto-open email client
       // window.location.href = `mailto:${email}`;
+    });
+
+    // LinkedIn button click handler - URL assembled at runtime to avoid bot scraping
+    document.getElementById('linkedin-btn').addEventListener('click', function() {
+      const base = 'linkedin';
+      const path = 'in/heliomedeiros';
+      window.open(`https://www.${base}.com/${path}/`, '_blank', 'noopener,noreferrer');
     });
 
     // Footer email click handler
