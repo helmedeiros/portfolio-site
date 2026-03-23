@@ -15,7 +15,7 @@
     "ci-check": "npm run test:run && npm run build && npm run preview -- --host 127.0.0.1 --port 4321"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.10",
+    "@tailwindcss/vite": "^4.2.2",
     "astro": "^5.10.1",
     "tailwindcss": "^4.1.7"
   },
