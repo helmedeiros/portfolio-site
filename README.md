@@ -4,6 +4,15 @@ A modern, minimalist personal website built with Astro and featuring a responsiv
 
 **Live Site:** [heliomedeiros.com](https://heliomedeiros.com)
 
+![Navigating from the hero to the work cards and writing section](docs/demo/tour.gif)
+*Smooth-scroll navigation and hover-lift project cards.*
+
+![Revealing the obfuscated contact email](docs/demo/contact.gif)
+*The contact email stays hidden from scrapers until a visitor asks for it.*
+
+![Scrolling the site on a phone-sized screen](docs/demo/mobile.gif)
+*The same page on a phone.*
+
 ## Design Features
 
 - **Minimalist Design**: Clean, spacious layout with strategic use of white space
