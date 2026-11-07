@@ -17,9 +17,9 @@
     "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.1.10",
+    "@tailwindcss/vite": "^4.3.5",
     "astro": "^5.10.1",
-    "tailwindcss": "^4.1.7"
+    "tailwindcss": "^4.3.5"
   },
   "devDependencies": {
     "@vitest/ui": "^4.0.18",
