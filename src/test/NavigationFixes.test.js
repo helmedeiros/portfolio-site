@@ -19,7 +19,7 @@ describe('Navigation Fixes', () => {
       querySelectorAll: vi.fn(() => []),
       getAttribute: vi.fn(),
     };
-    global.document = mockDocument;
+    vi.stubGlobal('document', mockDocument);
   });
 
   describe('querySelector Safety', () => {
@@ -107,17 +107,17 @@ describe('Navigation Fixes', () => {
   describe('Scroll Tracking Safety', () => {
     it('should handle division by zero in scroll calculation', () => {
       // Mock window properties that could cause division by zero
-      global.window = {
+      vi.stubGlobal('window', {
         pageYOffset: 0,
         innerHeight: 1000,
         addEventListener: vi.fn(),
-      };
+      });
 
-      global.document = {
+      vi.stubGlobal('document', {
         documentElement: {
           scrollHeight: 1000, // Same as window height - would cause division by zero
         },
-      };
+      });
 
       const trackScrollDepth = () => {
         try {
@@ -151,17 +151,17 @@ describe('Navigation Fixes', () => {
     });
 
     it('should calculate scroll percentage correctly when safe', () => {
-      global.window = {
+      vi.stubGlobal('window', {
         pageYOffset: 250,
         innerHeight: 1000,
         addEventListener: vi.fn(),
-      };
+      });
 
-      global.document = {
+      vi.stubGlobal('document', {
         documentElement: {
           scrollHeight: 2000, // Larger than window height - safe for calculation
         },
-      };
+      });
 
       const trackScrollDepth = () => {
         try {

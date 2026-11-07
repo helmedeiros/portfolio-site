@@ -23,7 +23,7 @@ describe('GoogleAnalytics Component', () => {
       head: mockHead,
     };
 
-    global.document = mockDocument;
+    vi.stubGlobal('document', mockDocument);
 
     // Mock console methods
     global.console = {

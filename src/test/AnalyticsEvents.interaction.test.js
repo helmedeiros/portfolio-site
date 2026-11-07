@@ -23,7 +23,7 @@ describe('AnalyticsEvents User Interaction Errors', () => {
       innerHeight: 1000,
       location: { hostname: 'heliomedeiros.com' },
     };
-    global.window = mockWindow;
+    vi.stubGlobal('window', mockWindow);
 
     // Mock document
     mockDocument = {
@@ -31,7 +31,7 @@ describe('AnalyticsEvents User Interaction Errors', () => {
       querySelectorAll: vi.fn(() => []),
       getElementById: vi.fn(() => null),
     };
-    global.document = mockDocument;
+    vi.stubGlobal('document', mockDocument);
   });
 
   afterEach(() => {
