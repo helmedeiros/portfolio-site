@@ -13,7 +13,8 @@
     "test:coverage": "vitest run --coverage",
     "pre-push": "npm run test:run && npm run build",
     "demo": "npm run build && node docs/demo/record.mjs",
-    "ci-check": "npm run test:run && npm run build && npm run preview -- --host 127.0.0.1 --port 4321"
+    "ci-check": "npm run test:run && npm run build && npm run preview -- --host 127.0.0.1 --port 4321",
+    "smoke": "node scripts/smoke.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.10",
