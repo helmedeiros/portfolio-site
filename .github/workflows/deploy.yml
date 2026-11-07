@@ -1,35 +1,69 @@
 name: Deploy to GitHub Pages
 
 on:
-  # Trigger the workflow every time you push to the `main` branch
   push:
     branches: [main]
-  # Allows you to run this workflow manually from the Actions tab on GitHub.
+  pull_request:
   workflow_dispatch:
 
-# Allow this job to clone the repo and create a page deployment
 permissions:
   contents: read
-  pages: write
-  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  SITE_URL: https://heliomedeiros.com/
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      index-sha: ${{ steps.fingerprint.outputs.sha }}
     steps:
-      - name: Checkout your repository using git
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
 
-      - name: Install, build, and upload your site
-        uses: withastro/action@v6
+      - uses: actions/setup-node@v7
         with:
-          path: . # The root location of your Astro project inside the repository. (optional)
           node-version: 20
-          package-manager: npm@latest # The Node package manager that should be used to install dependencies and build your site. Automatically detected based on your lockfile. (optional)
+          cache: npm
+
+      - run: npm ci
+
+      - name: Unit tests
+        run: npm run test:run
+
+      - name: Build
+        run: npm run build
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Smoke test the built site
+        run: |
+          npx astro preview --host 127.0.0.1 --port 4321 > preview.log 2>&1 &
+          for _ in $(seq 30); do
+            curl -fsS -o /dev/null http://127.0.0.1:4321/ && break
+            sleep 1
+          done
+          npm run smoke -- http://127.0.0.1:4321/ || { cat preview.log; exit 1; }
+
+      - id: fingerprint
+        run: echo "sha=$(sha256sum dist/index.html | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: dist/
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -37,3 +71,38 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  verify-live:
+    needs: [build, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Wait for the new build to be served
+        env:
+          WANT: ${{ needs.build.outputs.index-sha }}
+        run: |
+          for attempt in $(seq 40); do
+            got=$(curl -fsS "${SITE_URL}?v=${GITHUB_RUN_ID}-${attempt}" | sha256sum | cut -d' ' -f1)
+            if [ "$got" = "$WANT" ]; then
+              echo "verify-live: $SITE_URL serves build $WANT"
+              exit 0
+            fi
+            echo "verify-live: attempt $attempt serves $got, waiting for $WANT"
+            sleep 15
+          done
+          echo "::error::verify-live: $SITE_URL never served build $WANT"
+          exit 1
+
+      - name: Smoke test the live site
+        run: npm run smoke -- "$SITE_URL"
